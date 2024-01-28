@@ -2,6 +2,7 @@ import 'package:carp_core/carp_core.dart';
 import 'package:carp_mobile_sensing/carp_mobile_sensing.dart';
 import '../models/deployment_model.dart';
 import '../models/device_model.dart';
+import '../models/probe_model.dart';
 import '../sensing/sensing.dart';
 
 
@@ -58,8 +59,8 @@ class SensingBLoC {
       _model ??= StudyDeploymentModel(deployment!);
 
   /// Get a list of running probes
-  // Iterable<ProbeModel> get runningProbes =>
-  //     Sensing().runningProbes.map((probe) => ProbeModel(probe));
+  Iterable<ProbeModel> get runningProbes =>
+      Sensing().runningProbes.map((probe) => ProbeModel(probe));
 
   /// Get a list of running devices
   Iterable<DeviceModel> get availableDevices =>

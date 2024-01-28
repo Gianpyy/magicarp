@@ -1,7 +1,7 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:magicarp/src/sensing/sensing.dart';
 import 'package:magicarp/src/ui/device_list.dart';
+import 'package:magicarp/src/ui/probe_list.dart';
 import 'package:magicarp/src/ui/study_deployment_page.dart';
 
 import 'bloc/sensing_bloc.dart';
@@ -69,7 +69,7 @@ class _CarpMobileSensingAppState extends State<CarpMobileSensingApp> {
 
   final _pages = [
     const StudyDeploymentPage(),
-    const Placeholder(),
+    const ProbeList(),
     const DeviceList(),
   ];
 
