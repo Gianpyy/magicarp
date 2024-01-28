@@ -1,6 +1,7 @@
 import 'package:carp_core/carp_core.dart';
 import 'package:carp_mobile_sensing/carp_mobile_sensing.dart';
 import '../models/deployment_model.dart';
+import '../models/device_model.dart';
 import '../sensing/sensing.dart';
 
 
@@ -61,8 +62,8 @@ class SensingBLoC {
   //     Sensing().runningProbes.map((probe) => ProbeModel(probe));
 
   /// Get a list of running devices
-  // Iterable<DeviceModel> get availableDevices =>
-  //     Sensing().availableDevices!.map((device) => DeviceModel(device));
+  Iterable<DeviceModel> get availableDevices =>
+      Sensing().availableDevices!.map((device) => DeviceModel(device));
 
   /// Initialize the BLoC
   Future<void> initialize({
@@ -82,8 +83,8 @@ class SensingBLoC {
   }
 
   /// Connect to a [device] which is part of the [deployment].
-  // void connectToDevice(DeviceModel device) =>
-  //     Sensing().client?.deviceController.devices[device.type!]!.connect();
+  void connectToDevice(DeviceModel device) =>
+      Sensing().client?.deviceController.devices[device.type!]!.connect();
 
   /// Resume sensing
   void resume() async => Sensing().controller?.executor.start();

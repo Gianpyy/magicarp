@@ -55,8 +55,7 @@ class DeviceModel {
   };
 
   static Map<String, Icon> get deviceTypeIcon => {
-    Smartphone.DEVICE_TYPE:
-    Icon(Icons.phone_android, size: 50, color: CACHET.GREY_4),
+    Smartphone.DEVICE_TYPE: const Icon(Icons.phone_android, size: 50, color: CACHET.GREY_4),
     // ESenseDevice.DEVICE_TYPE:
     // Icon(Icons.headset, size: 50, color: CACHET.CACHET_BLUE),
     // PolarDevice.DEVICE_TYPE:
@@ -70,11 +69,10 @@ class DeviceModel {
   };
 
   static Map<DeviceStatus, Icon> get deviceStateIcon => {
-    DeviceStatus.unknown: Icon(Icons.error_outline, color: CACHET.RED),
-    DeviceStatus.error: Icon(Icons.error_outline, color: CACHET.RED),
-    DeviceStatus.disconnected: Icon(Icons.close, color: CACHET.YELLOW),
-    DeviceStatus.connected: Icon(Icons.check, color: CACHET.GREEN),
-    DeviceStatus.paired:
-    Icon(Icons.bluetooth_connected, color: CACHET.DARK_BLUE),
+    DeviceStatus.unknown: const Icon(Icons.error_outline, color: CACHET.RED),
+    DeviceStatus.error: const Icon(Icons.error_outline, color: CACHET.RED),
+    DeviceStatus.disconnected: const Icon(Icons.close, color: CACHET.YELLOW),
+    DeviceStatus.connected: const Icon(Icons.check, color: CACHET.GREEN),
+    DeviceStatus.paired: const Icon(Icons.bluetooth_connected, color: CACHET.DARK_BLUE),
   };
 }

@@ -9,9 +9,9 @@ void main() async{
   WidgetsFlutterBinding.ensureInitialized();
 
   // initialize the bloc, setting the deployment mode:
-  //  * LOCAL
-  //  * CARP_STAGGING
-  //  * CARP_PRODUCTION
+  //  * local
+  //  * carpStaging
+  //  * carpProduction
   await bloc.initialize(
     deploymentMode: DeploymentMode.local,
     useCachedStudyDeployment: false,
