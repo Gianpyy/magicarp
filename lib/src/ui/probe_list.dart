@@ -1,4 +1,3 @@
-import 'package:carp_core/carp_core.dart';
 import 'package:carp_mobile_sensing/carp_mobile_sensing.dart';
 import 'package:flutter/material.dart';
 
@@ -25,7 +24,7 @@ class _ProbeListState extends State<ProbeList> {
     return Scaffold(
       key: scaffoldKey,
       appBar: AppBar(
-        title: Text('Probes'),
+        title: const Text('Probes'),
         //TODO - move actions/settings icon to the app level.
         actions: <Widget>[
           IconButton(
@@ -59,7 +58,6 @@ class _ProbeListState extends State<ProbeList> {
             leading: probe.icon,
             title: Text(probe.name),
             subtitle: Text(probe.description),
-//            subtitle: Text(probe.measure.toString()),
             trailing: probe.stateIcon,
           );
         } else if (snapshot.hasError) {

@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'package:carp_mobile_sensing/carp_mobile_sensing.dart';
 import 'package:flutter/material.dart';
 import '../bloc/sensing_bloc.dart';
@@ -60,7 +61,7 @@ class _DeviceListState extends State<DeviceList> {
               const Divider(),
               TextButton(
                 child: const Text("How to use this device?"),
-                onPressed: () => print("Use the $device"),
+                onPressed: () => log("Use the $device"),
               ),
               (device.status != DeviceStatus.connected)
               ? Column(
