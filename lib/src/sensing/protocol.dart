@@ -4,9 +4,7 @@ import 'package:carp_context_package/carp_context_package.dart';
 import 'package:carp_core/carp_core.dart';
 import 'package:carp_mobile_sensing/carp_mobile_sensing.dart';
 
-/// This is a simple local [StudyProtocolManager]
-///
-/// This class shows how to configure a [StudyProtocol] with Triggers, Tasks and Measures
+/// This class configures a [SmartphoneStudyProtocol] with [Trigger]s, [TaskControl]s and [Measure]s
 class LocalStudyProtocolManager implements StudyProtocolManager {
   @override
   Future<void> initialize() async {}
@@ -14,16 +12,21 @@ class LocalStudyProtocolManager implements StudyProtocolManager {
   /// Create a new CAMS study protocol
   @override
   Future<SmartphoneStudyProtocol> getStudyProtocol(String id) async {
-    // Create a protocol
-    // Note that the [id] is not used for anything
+
+    /// Create a study protocol with a [FileDataEndPoint] that uses the Open mHealth data format
     SmartphoneStudyProtocol protocol = SmartphoneStudyProtocol(
         ownerId: "Gianpy",
         name: "Track something",
-        dataEndPoint: FileDataEndPoint(bufferSize: 500 * 1000, zip: false),
+        dataEndPoint: FileDataEndPoint(
+            bufferSize: 500 * 1000,
+            zip: false,
+            encrypt: false,
+            dataFormat: NameSpace.OMH
+        ),
     );
 
     // Define which devices are used for data collection
-    // In this case, it's only this phone
+    // In this case, it's only this [Smartphone]
     var phone = Smartphone();
     protocol.addPrimaryDevice(phone);
 
@@ -34,6 +37,12 @@ class LocalStudyProtocolManager implements StudyProtocolManager {
         interval: const Duration(minutes: 1)
     );
     protocol.addConnectedDevice(locationService, phone);
+
+
+    /*
+     * The following section contains the configuration for various tasks
+     * utilized in data collection.
+     */
 
     // Collect device info only once, when this study is deployed.
     protocol.addTaskControl(
