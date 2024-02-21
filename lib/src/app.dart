@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:magicarp/src/sensing/sensing.dart';
+import 'package:magicarp/src/ui/data_visualization_page.dart';
 import 'package:magicarp/src/ui/device_list.dart';
 import 'package:magicarp/src/ui/probe_list.dart';
 import 'package:magicarp/src/ui/study_deployment_page.dart';
@@ -71,6 +72,7 @@ class _CarpMobileSensingAppState extends State<CarpMobileSensingApp> {
     const StudyDeploymentPage(),
     const ProbeList(),
     const DeviceList(),
+    const DataVisualizationPage(),
   ];
 
 
@@ -89,8 +91,10 @@ class _CarpMobileSensingAppState extends State<CarpMobileSensingApp> {
           BottomNavigationBarItem(icon: Icon(Icons.school), label: "Study"),
           BottomNavigationBarItem(icon: Icon(Icons.adb), label: "Probes"),
           BottomNavigationBarItem(icon: Icon(Icons.watch), label: "Devices"),
+          BottomNavigationBarItem(icon: Icon(Icons.insert_chart), label: "Data"),
         ],
         currentIndex: _selectedIndex,
+        type: BottomNavigationBarType.fixed,
         onTap: _onItemTapped,
       ),
       floatingActionButton: FloatingActionButton(

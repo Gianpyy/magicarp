@@ -1,5 +1,6 @@
 import 'package:carp_core/carp_core.dart';
 import 'package:carp_mobile_sensing/carp_mobile_sensing.dart';
+import 'package:magicarp/src/bloc/metrics/screen_activity_metrics.dart';
 import '../models/deployment_model.dart';
 import '../models/device_model.dart';
 import '../models/probe_model.dart';
@@ -12,6 +13,9 @@ class SensingBLoC {
   String? _studyDeploymentId;
   bool _useCached = true;
   bool _resumeSensingOnStartup = false;
+
+  // Metrics classes
+  final ScreenActivityMetrics _screenActivityMetrics = ScreenActivityMetrics();
 
   /// The study deployment id for the currently running deployment
   /// Returns the deployment id cached locally on the phone (if available)
@@ -95,6 +99,9 @@ class SensingBLoC {
 
   /// Is sensing running, i.e. has the study executor has been resumed?
   bool get isRunning => (Sensing().controller != null) && Sensing().controller!.executor.state == ExecutorState.started;
+
+  /// The instance of ScreenActivityMetrics
+  ScreenActivityMetrics get screenActivityMetrics => _screenActivityMetrics;
 }
 
 final bloc = SensingBLoC();

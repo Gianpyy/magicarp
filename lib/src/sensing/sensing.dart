@@ -7,6 +7,7 @@ import 'package:carp_mobile_sensing/carp_mobile_sensing.dart';
 import 'package:carp_serializable/carp_serializable.dart';
 import 'package:magicarp/src/sensing/protocol.dart';
 
+import '../bloc/metrics/screen_activity_metrics.dart';
 import '../bloc/sensing_bloc.dart';
 
 /// This class implements the sensing layer.
@@ -32,7 +33,7 @@ class Sensing {
   /// The study runtime controller for this deployment
   SmartphoneDeploymentController? get controller => _controller;
 
-  /// the list of running - i.e. used - probes in this study.
+  /// The list of running - i.e. used - probes in this study.
   List<Probe> get runningProbes =>
       (_controller != null) ? _controller!.executor.probes : [];
 
@@ -114,5 +115,10 @@ class Sensing {
     client?.measurements.listen((measurement) => log("${toJsonString(measurement)}\n"));
 
     info('$runtimeType initialized');
+
+    // Initialize metrics
+    ScreenActivityMetrics screenActivityMetrics = bloc.screenActivityMetrics;
+    screenActivityMetrics.startListening();
+    info("ScreenActivityMetrics initialized");
   }
 }
