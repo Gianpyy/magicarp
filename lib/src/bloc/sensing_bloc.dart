@@ -15,7 +15,7 @@ class SensingBLoC {
   bool _resumeSensingOnStartup = false;
 
   // Metrics classes
-  final ScreenActivityMetrics _screenActivityMetrics = ScreenActivityMetrics();
+  final ScreenActivityMetrics _screenActivityMetrics = ScreenActivityMetrics.instance;
 
   /// The study deployment id for the currently running deployment
   /// Returns the deployment id cached locally on the phone (if available)

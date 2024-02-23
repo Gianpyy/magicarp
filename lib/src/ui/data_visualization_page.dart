@@ -1,19 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:magicarp/src/models/metrics_models/screen_activity_metrics_model.dart';
 import 'package:magicarp/src/ui/widgets/screen_activity_metrics_widget.dart';
+import 'package:provider/provider.dart';
 
-class DataVisualizationPage extends StatefulWidget {
-  const DataVisualizationPage({super.key});
-
-  @override
-  State<DataVisualizationPage> createState() => _DataVisualizationPageState();
-}
-
-class _DataVisualizationPageState extends State<DataVisualizationPage> {
-  static final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
+class DataVisualizationPage extends StatelessWidget {
+  const DataVisualizationPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    final model = ScreenActivityMetricsModel.instance;
+
     return Scaffold(
       appBar: AppBar(
         title: const Text("Screen Activity Metrics"),
@@ -21,7 +17,10 @@ class _DataVisualizationPageState extends State<DataVisualizationPage> {
       body: Center(
         child: Padding(
           padding: const EdgeInsets.all(20.0),
-          child: ScreenMetricsDisplayWidget(model: ScreenActivityMetricsModel()),
+          child: ChangeNotifierProvider.value(
+            value: model,
+            child: const ScreenMetricsDisplayWidget(),
+          ),
         ),
       ),
     );

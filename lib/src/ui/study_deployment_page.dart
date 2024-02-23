@@ -162,7 +162,7 @@ class _StudyControllerLine extends StatelessWidget {
               children: <TextSpan>[
                 TextSpan(
                   text: '$heading',
-                  style: TextStyle(fontWeight: FontWeight.bold),
+                  style: const TextStyle(fontWeight: FontWeight.bold),
                 ),
                 TextSpan(text: line),
               ],
@@ -174,7 +174,7 @@ class _StudyControllerLine extends StatelessWidget {
 }
 
 class _TaskPanel extends StatelessWidget {
-  _TaskPanel({Key? key, this.task}) : super(key: key);
+  const _TaskPanel({Key? key, this.task}) : super(key: key);
 
   final TaskConfiguration? task;
 
@@ -196,7 +196,7 @@ class _TaskPanel extends StatelessWidget {
               bottom: false,
               child: Column(children: <Widget>[
                 Row(children: <Widget>[
-                  Icon(Icons.description, size: 40, color: CACHET.ORANGE),
+                  const Icon(Icons.description, size: 40, color: CACHET.ORANGE),
                   Text('  ${task!.name}', style: themeData.textTheme.titleLarge),
                 ]),
                 Column(children: children!)
@@ -207,7 +207,7 @@ class _TaskPanel extends StatelessWidget {
 }
 
 class _MeasureLine extends StatelessWidget {
-  _MeasureLine({Key? key, this.measure}) : super(key: key);
+  const _MeasureLine({Key? key, this.measure}) : super(key: key);
 
   final Measure? measure;
 

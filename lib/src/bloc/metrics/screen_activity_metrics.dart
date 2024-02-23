@@ -1,17 +1,24 @@
 import 'dart:async';
 import 'package:carp_core/carp_core.dart';
 import 'package:carp_mobile_sensing/carp_mobile_sensing.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:magicarp/src/sensing/sensing.dart';
 
 
-class ScreenActivityMetrics {
+class ScreenActivityMetrics extends ChangeNotifier{
   int _numberOfUses = 0;
   int _totalUseTime = 0;
   double _averageUseTime = 0.0;
-
   final Stopwatch _stopwatch = Stopwatch();
-
   StreamSubscription<Measurement>? _subscription;
+
+  // Singleton
+  static final ScreenActivityMetrics _instance = ScreenActivityMetrics._internal();
+  factory ScreenActivityMetrics() => _instance;
+  ScreenActivityMetrics._internal();
+
+  /// Get the instance of ScreenActivityMetrics
+  static ScreenActivityMetrics get instance => _instance;
 
   /// Start listening to screen events from the measurements stream
   void startListening() {
@@ -37,6 +44,9 @@ class ScreenActivityMetrics {
       _numberOfUses++;
       _stopwatch.start();
 
+      // Notify listeners about changes in data
+      notifyListeners();
+
       info("New use detected! Total numer of uses: $_numberOfUses");
 
     } else {
@@ -48,6 +58,12 @@ class ScreenActivityMetrics {
       _totalUseTime += _stopwatch.elapsedMilliseconds;
       _averageUseTime = (_totalUseTime / _numberOfUses);
       _stopwatch.reset();
+
+      info("Total use time: $totalUseTime");
+      info("Average use time: $averageUseTime");
+
+      // Notify listeners about changes in data
+      notifyListeners();
     }
 
   }

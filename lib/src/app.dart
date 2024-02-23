@@ -4,7 +4,6 @@ import 'package:magicarp/src/ui/data_visualization_page.dart';
 import 'package:magicarp/src/ui/device_list.dart';
 import 'package:magicarp/src/ui/probe_list.dart';
 import 'package:magicarp/src/ui/study_deployment_page.dart';
-
 import 'bloc/sensing_bloc.dart';
 
 class App extends StatelessWidget {
