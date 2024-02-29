@@ -26,11 +26,11 @@ class ScreenActivityMetrics extends ChangeNotifier{
         .where((measurement) => measurement.data.format.toString() == DeviceSamplingPackage.SCREEN_EVENT)
         .listen((data) {
           processData(data);
-    }, onDone: () {
-          handleDone();
-    }, onError: (error) {
-          handleError(error);
-    });
+        }, onDone: () {
+              handleDone();
+        }, onError: (error) {
+              handleError(error);
+        });
   }
 
   /// Process the data received by the measurements stream
