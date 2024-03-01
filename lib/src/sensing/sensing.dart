@@ -6,6 +6,7 @@ import 'package:carp_core/carp_core.dart';
 import 'package:carp_mobile_sensing/carp_mobile_sensing.dart';
 import 'package:carp_serializable/carp_serializable.dart';
 import 'package:magicarp/src/bloc/metrics/app_usage_metrics.dart';
+import 'package:magicarp/src/bloc/metrics/message_metrics.dart';
 import 'package:magicarp/src/sensing/protocol.dart';
 
 import '../bloc/metrics/screen_activity_metrics.dart';
@@ -131,5 +132,10 @@ class Sensing {
     AppUsageMetrics appUsageMetrics = bloc.appUsageMetrics;
     appUsageMetrics.startListening();
     info("AppUsageMetrics initialized");
+
+    // Initialize MessageMetrics
+    MessageMetrics messageMetrics = bloc.messageMetrics;
+    messageMetrics.startListening();
+    info("MessageMetrics initialized");
   }
 }

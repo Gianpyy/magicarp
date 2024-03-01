@@ -36,7 +36,7 @@ class ScreenActivityMetrics extends ChangeNotifier{
   /// Process the data received by the measurements stream
   void processData(Measurement measurement) {
     ScreenEvent screenEvent = measurement.data as ScreenEvent;
-    info("Received data: ${screenEvent.screenEvent}");
+    info("[ScreenActivityMetrics] Received data: ${screenEvent.screenEvent}");
 
     if(screenEvent.screenEvent == "SCREEN_ON") {
       // When the screen is turned on, increment the number of uses and start

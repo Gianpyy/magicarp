@@ -1,6 +1,7 @@
 import 'package:carp_core/carp_core.dart';
 import 'package:carp_mobile_sensing/carp_mobile_sensing.dart';
 import 'package:magicarp/src/bloc/metrics/app_usage_metrics.dart';
+import 'package:magicarp/src/bloc/metrics/message_metrics.dart';
 import 'package:magicarp/src/bloc/metrics/screen_activity_metrics.dart';
 import '../models/deployment_model.dart';
 import '../models/device_model.dart';
@@ -18,6 +19,7 @@ class SensingBLoC {
   // Metrics classes
   final ScreenActivityMetrics _screenActivityMetrics = ScreenActivityMetrics.instance;
   final AppUsageMetrics _appUsageMetrics = AppUsageMetrics.instance;
+  final MessageMetrics _messageMetrics = MessageMetrics.instance;
 
   /// The study deployment id for the currently running deployment
   /// Returns the deployment id cached locally on the phone (if available)
@@ -107,6 +109,9 @@ class SensingBLoC {
 
   /// The instance of AppUsageMetrics
   AppUsageMetrics get appUsageMetrics => _appUsageMetrics;
+
+  /// The instance of MessageMetrics
+  MessageMetrics get messageMetrics => _messageMetrics;
 }
 
 final bloc = SensingBLoC();

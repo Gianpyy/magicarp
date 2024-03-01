@@ -86,6 +86,21 @@ class LocalStudyProtocolManager implements StudyProtocolManager {
         phone,
     );
 
+
+    //TEST
+    // Collect data about the app usage, phone calls and text messages
+    // Sampling is done 1 minute after the study has begun
+    protocol.addTaskControl(
+      DelayedTrigger(delay: const Duration(minutes: 1)),
+      BackgroundTask(measures: [
+        Measure(type: AppsSamplingPackage.APP_USAGE),
+        Measure(type: CommunicationSamplingPackage.PHONE_LOG),
+        Measure(type: CommunicationSamplingPackage.TEXT_MESSAGE_LOG),
+      ]),
+      phone,
+    );
+
+
     return protocol;
   }
 
