@@ -7,6 +7,7 @@ import 'package:carp_mobile_sensing/carp_mobile_sensing.dart';
 import 'package:carp_serializable/carp_serializable.dart';
 import 'package:magicarp/src/bloc/metrics/app_usage_metrics.dart';
 import 'package:magicarp/src/bloc/metrics/message_metrics.dart';
+import 'package:magicarp/src/bloc/metrics/mobility_metrics.dart';
 import 'package:magicarp/src/sensing/protocol.dart';
 
 import '../bloc/metrics/screen_activity_metrics.dart';
@@ -15,8 +16,13 @@ import '../bloc/sensing_bloc.dart';
 /// This class implements the sensing layer.
 ///
 /// Call [initialize] to setup a deployment.
+///
 /// Once initialized, the runtime [controller] can be used to
 /// control the study execution (e.g., resume, pause, stop).
+///
+/// Collected data is available in the [measurements] stream.
+///
+/// Works as a singleton, and can be accessed by `Sensing()`.
 class Sensing {
   static final Sensing _instance = Sensing._();
   StudyDeploymentStatus? _status;
@@ -24,6 +30,8 @@ class Sensing {
 
   DeploymentService? deploymentService;
   SmartPhoneClientManager? client;
+
+  /// The study running on this phone
   Study? study;
 
   /// Get the latest status of the study deployment.
@@ -33,7 +41,13 @@ class Sensing {
   String? get deviceRolename => _status?.primaryDeviceStatus?.device.roleName;
 
   /// The study runtime controller for this deployment
-  SmartphoneDeploymentController? get controller => _controller;
+  SmartphoneDeploymentController? get controller => (study != null)
+      ? SmartPhoneClientManager().getStudyRuntime(study!)
+      : null;
+
+  /// The stream of all sampled measurements.
+  Stream<Measurement> get measurements =>
+      controller?.measurements ?? const Stream.empty();
 
   /// The list of running - i.e. used - probes in this study.
   List<Probe> get runningProbes =>
@@ -41,16 +55,20 @@ class Sensing {
 
   /// The list of available devices.
   List<DeviceManager>? get availableDevices =>
-      (client != null) ? client!.deviceController.devices.values.toList() : [];
+      SmartPhoneClientManager().deviceController.devices.values.toList();
+
+  /// The list of connected devices.
+  List<DeviceManager>? get connectedDevices =>
+      SmartPhoneClientManager().deviceController.connectedDevices.toList();
 
   /// The singleton sensing instance
   factory Sensing() => _instance;
 
   // Create and register external sampling packages
-  Sensing._() {
-    CarpMobileSensing();
+  Sensing._() : super() {
+    CarpMobileSensing.ensureInitialized();
 
-    // Add external packages
+    // Create and register external sampling packages
     SamplingPackageRegistry().register(ContextSamplingPackage());
     SamplingPackageRegistry().register(AppsSamplingPackage());
     SamplingPackageRegistry().register(CommunicationSamplingPackage());
@@ -137,5 +155,10 @@ class Sensing {
     MessageMetrics messageMetrics = bloc.messageMetrics;
     messageMetrics.startListening();
     info("MessageMetrics initialized");
+
+    // Initialize MobilityMetrics
+    MobilityMetrics mobilityMetrics = bloc.mobilityMetrics;
+    mobilityMetrics.startListening();
+    info("MobilityMetrics initialized");
   }
 }

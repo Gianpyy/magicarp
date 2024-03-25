@@ -3,6 +3,7 @@ import 'package:carp_mobile_sensing/carp_mobile_sensing.dart';
 import 'package:flutter/material.dart';
 import 'package:magicarp/src/models/probe_description.dart';
 
+/// A view model for a [Probe].
 class ProbeModel {
   Probe probe;
   String? get type => probe.type;
@@ -11,10 +12,10 @@ class ProbeModel {
   Stream<ExecutorState> get stateEvents => probe.stateEvents;
 
   ///A printer-friendly name for this probe.
-  String get name => ProbeDescription.descriptors[type]!.name;
+  String? get name => ProbeDescription.descriptors[type]?.name;
 
   ///A printer-friendly description of this probe.
-  String get description => ProbeDescription.descriptors[type]!.description;
+  String? get description => ProbeDescription.descriptors[type]?.description;
 
   /// The icon for this type of probe.
   Icon? get icon => ProbeDescription.probeTypeIcon[type];

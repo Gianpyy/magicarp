@@ -2,6 +2,7 @@ import 'package:carp_core/carp_core.dart';
 import 'package:carp_mobile_sensing/carp_mobile_sensing.dart';
 import 'package:magicarp/src/bloc/metrics/app_usage_metrics.dart';
 import 'package:magicarp/src/bloc/metrics/message_metrics.dart';
+import 'package:magicarp/src/bloc/metrics/mobility_metrics.dart';
 import 'package:magicarp/src/bloc/metrics/screen_activity_metrics.dart';
 import '../models/deployment_model.dart';
 import '../models/device_model.dart';
@@ -20,6 +21,10 @@ class SensingBLoC {
   final ScreenActivityMetrics _screenActivityMetrics = ScreenActivityMetrics.instance;
   final AppUsageMetrics _appUsageMetrics = AppUsageMetrics.instance;
   final MessageMetrics _messageMetrics = MessageMetrics.instance;
+  final MobilityMetrics _mobilityMetrics = MobilityMetrics.instance;
+
+  /// The [Sensing] layer used in the app.
+  Sensing get sensing => Sensing();
 
   /// The study deployment id for the currently running deployment
   /// Returns the deployment id cached locally on the phone (if available)
@@ -70,15 +75,19 @@ class SensingBLoC {
   Iterable<ProbeModel> get runningProbes =>
       Sensing().runningProbes.map((probe) => ProbeModel(probe));
 
-  /// Get a list of running devices
+  /// Get a list of available devices
   Iterable<DeviceModel> get availableDevices =>
       Sensing().availableDevices!.map((device) => DeviceModel(device));
+
+  /// Get a list of running devices
+  Iterable<DeviceModel> get connectedDevices =>
+      Sensing().connectedDevices!.map((device) => DeviceModel(device));
 
   /// Initialize the BLoC
   Future<void> initialize({
     DeploymentMode deploymentMode = DeploymentMode.local,
-    String dataFormat = NameSpace.OMH,
-    bool useCachedStudyDeployment = true,
+    String dataFormat = NameSpace.CARP,
+    bool useCachedStudyDeployment = false,
     bool resumeSensingOnStartup = false,
   }) async {
     await Settings().init();
@@ -93,13 +102,27 @@ class SensingBLoC {
 
   /// Connect to a [device] which is part of the [deployment].
   void connectToDevice(DeviceModel device) =>
-      Sensing().client?.deviceController.devices[device.type!]!.connect();
+      SmartPhoneClientManager().deviceController.devices[device.type!]!.connect();
 
-  /// Resume sensing
-  void resume() async => Sensing().controller?.executor.start();
+  /// Start sensing
+  void start() {
+    SmartPhoneClientManager().notificationController?.createNotification(
+      title: 'Sensing Started',
+      body:
+      'Data sampling is now running in the background. Click the STOP button to stop sampling again.',
+    );
+    SmartPhoneClientManager().start();
+  }
 
   /// Stop sensing
-  void stop() async => Sensing().controller?.executor.stop();
+  void stop() {
+    SmartPhoneClientManager().notificationController?.createNotification(
+      title: 'Sensing Stopped',
+      body:
+      'Sampling is stopped and no more data will be collected. Click the START button to restart sampling.',
+    );
+    SmartPhoneClientManager().stop();
+  }
 
   /// Is sensing running, i.e. has the study executor has been resumed?
   bool get isRunning => (Sensing().controller != null) && Sensing().controller!.executor.state == ExecutorState.started;
@@ -112,6 +135,9 @@ class SensingBLoC {
 
   /// The instance of MessageMetrics
   MessageMetrics get messageMetrics => _messageMetrics;
+
+  /// The instance of MobilityMetrics
+  MobilityMetrics get mobilityMetrics => _mobilityMetrics;
 }
 
 final bloc = SensingBLoC();

@@ -245,10 +245,8 @@ class ProbeDescription {
 
   static Map<ExecutorState, Icon> get probeStateIcon => {
     ExecutorState.created: const Icon(Icons.child_care, color: CACHET.GREY_4),
-    ExecutorState.initialized:
-    const Icon(Icons.check, color: CACHET.LIGHT_PURPLE),
-    ExecutorState.started:
-    const Icon(Icons.radio_button_unchecked, color: CACHET.GREEN),
+    ExecutorState.initialized: const Icon(Icons.check, color: CACHET.LIGHT_PURPLE),
+    ExecutorState.started: const Icon(Icons.radio_button_unchecked, color: CACHET.GREEN),
     ExecutorState.stopped: const Icon(Icons.close, color: CACHET.GREY_2),
     ExecutorState.undefined: const Icon(Icons.error_outline, color: CACHET.RED),
   };

@@ -38,7 +38,7 @@ class ScreenActivityMetrics extends ChangeNotifier{
     ScreenEvent screenEvent = measurement.data as ScreenEvent;
     info("[ScreenActivityMetrics] Received data: ${screenEvent.screenEvent}");
 
-    if(screenEvent.screenEvent == "SCREEN_ON") {
+    if(screenEvent.screenEvent == "SCREEN_UNLOCKED") {
       // When the screen is turned on, increment the number of uses and start
       // counting the time that the phone is on use
       _numberOfUses++;
@@ -49,7 +49,7 @@ class ScreenActivityMetrics extends ChangeNotifier{
 
       info("New use detected! Total numer of uses: $_numberOfUses");
 
-    } else {
+    } else if (screenEvent.screenEvent == "SCREEN_OFF") {
       info("Screen turned off, calculating metrics");
 
       // When the screen is turned off, stop counting the time and increment the

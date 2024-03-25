@@ -56,8 +56,8 @@ class _ProbeListState extends State<ProbeList> {
           return ListTile(
             isThreeLine: true,
             leading: probe.icon,
-            title: Text(probe.name),
-            subtitle: Text(probe.description),
+            title: Text(probe.name ?? "Unknown"),
+            subtitle: Text(probe.description ?? "..."),
             trailing: probe.stateIcon,
           );
         } else if (snapshot.hasError) {

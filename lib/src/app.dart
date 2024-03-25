@@ -13,12 +13,14 @@ class App extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       theme: ThemeData.dark(),
       home: const LoadingPage(),
     );
   }
 }
 
+/// A loading page shown while the app is loading and setting up the sensing layer.
 class LoadingPage extends StatelessWidget {
   const LoadingPage({super.key});
 
@@ -32,7 +34,7 @@ class LoadingPage extends StatelessWidget {
   /// * start sensing
   Future<bool> init(BuildContext context) async {
     // Initialize the study
-    await Sensing().initialize();
+    await bloc.sensing.initialize();
 
     return true;
   }
@@ -57,6 +59,7 @@ class LoadingPage extends StatelessWidget {
 
 }
 
+/// The main view of the app, shown once loading is done.
 class CarpMobileSensingApp extends StatefulWidget {
   const CarpMobileSensingApp({super.key});
 
@@ -97,27 +100,17 @@ class _CarpMobileSensingAppState extends State<CarpMobileSensingApp> {
         onTap: _onItemTapped,
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: restart,
+        onPressed: _restart,
         tooltip: "Restart study & probes",
         child: bloc.isRunning ? const Icon(Icons.pause) : const Icon(Icons.play_arrow),
       ),
     );
   }
 
-  void _onItemTapped(int value) {
-    setState(() {
-      _selectedIndex = value;
-    });
-  }
+  void _onItemTapped(int index) => setState(() {
+    _selectedIndex = index;
+  });
 
-  void restart() {
-    setState(() {
-      if(bloc.isRunning) {
-        bloc.stop();
-      }
-      else {
-        bloc.resume();
-      }
-    });
-  }
+  void _restart() =>
+      setState(() => (bloc.isRunning) ? bloc.stop() : bloc.start());
 }

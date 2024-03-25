@@ -15,7 +15,7 @@ class ScreenActivityMetricsModel extends ChangeNotifier{
     });
   }
 
-  /// Get the instance of the model
+  /// The instance of the model
   static ScreenActivityMetricsModel get instance => _instance;
 
   /// The total number of uses of the phone by the user
