@@ -16,7 +16,7 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
 # In Windows, build-name is used as the major, minor, and patch parts
 # of the product and file versions while build-number is used as the build suffix.
-version: 0.0.6
+version: 0.0.8
 
 environment:
   sdk: '>=3.2.3 <4.0.0'
@@ -42,12 +42,14 @@ dependencies:
   carp_communication_package: ^1.4.1 # Communication sampling package (phone, sms)
   carp_context_package: ^1.4.1 # Context sampling package (location, activity, weather)
   carp_serializable: ^1.1.1  # JSON serialization package for CARP libraries
+  carp_survey_package: ^1.4.4 # Create surveys, obtain consent
 
   # Other
   flutter_launcher_icons: ^0.13.1
   json_annotation: ^4.8.1
   mobility_features: ^4.0.1
   provider: ^6.1.1
+  research_package: ^1.4.3
 
 dev_dependencies:
   flutter_test:

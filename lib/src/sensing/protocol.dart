@@ -3,6 +3,8 @@ import 'package:carp_communication_package/communication.dart';
 import 'package:carp_context_package/carp_context_package.dart';
 import 'package:carp_core/carp_core.dart';
 import 'package:carp_mobile_sensing/carp_mobile_sensing.dart';
+import 'package:carp_survey_package/survey.dart';
+import 'package:magicarp/src/sensing/surveys.dart';
 
 /// This class configures a [SmartphoneStudyProtocol] with [Trigger]s, [TaskControl]s and [Measure]s
 class LocalStudyProtocolManager implements StudyProtocolManager {
@@ -19,12 +21,15 @@ class LocalStudyProtocolManager implements StudyProtocolManager {
         // the ID of the user uploading the protocol.
         ownerId: "979b408d-784e-4b1b-bb1e-ff9204e072f3",
         name: "Track something, hopefully this time will work for sure!",
-        dataEndPoint: FileDataEndPoint(
-            bufferSize: 500 * 1000,
-            zip: false,
-            encrypt: false,
-            dataFormat: NameSpace.CARP
-        ),
+    );
+
+    // Define the data end-point
+    //protocol.dataEndPoint = SQLiteDataEndPoint();
+    protocol.dataEndPoint = FileDataEndPoint(
+        bufferSize: 1000 * 1000,
+        zip: false,
+        encrypt: false,
+        dataFormat: NameSpace.CARP,
     );
 
     // Always add a participant role to the protocol
@@ -126,18 +131,59 @@ class LocalStudyProtocolManager implements StudyProtocolManager {
         ]),
         locationService);
 
-    // Add a background task that collects geofence events using DTU as the
-    // center for the geofence.
+
+    // Collect demographic 10 minutes after the study starts
     protocol.addTaskControl(
-        ImmediateTrigger(),
-        BackgroundTask()
-          ..addMeasure(Measure(type: ContextSamplingPackage.GEOFENCE)
-            ..overrideSamplingConfiguration = GeofenceSamplingConfiguration(
-                name: 'DTU',
-                center: GeoPosition(55.786025, 12.524159),
-                dwell: const Duration(minutes: 15),
-                radius: 10.0)),
-        locationService);
+        DelayedTrigger(delay: const Duration(minutes: 10)),
+        RPAppTask(
+            type: SurveyUserTask.SURVEY_TYPE,
+            title: surveys.demographics.title,
+            description: surveys.demographics.description,
+            minutesToComplete: surveys.demographics.minutesToComplete,
+            notification: true,
+            rpTask: surveys.demographics.survey,
+            //measures: [Measure(type: ContextSamplingPackage.CURRENT_LOCATION)],
+        ),
+        phone);
+
+
+    // TEST STUFF
+    protocol.addTaskControl(
+        RecurrentScheduledTrigger(type: RecurrentType.daily, time: const TimeOfDay(hour: 22, minute: 0, second: 0)),
+        RPAppTask(
+          type: SurveyUserTask.SURVEY_TYPE,
+          title: surveys.dailyRecap.title,
+          description: surveys.dailyRecap.description,
+          minutesToComplete: surveys.dailyRecap.minutesToComplete,
+          notification: true,
+          rpTask: surveys.dailyRecap.survey,
+          // measures: [
+          //   Measure(type: ContextSamplingPackage.CURRENT_LOCATION),
+          // ],
+        ),
+        phone);
+
+    // Add a task that keeps reappearing when done.
+    // var mobilityTask = AppTask(
+    //     type: BackgroundSensingUserTask.ONE_TIME_SENSING_TYPE,
+    //     title: "Mobility",
+    //     description: "Collect mobility features",
+    //     measures: [
+    //       Measure(type: ContextSamplingPackage.MOBILITY),
+    //     ]);
+    //
+    // protocol.addTaskControl(
+    //     ImmediateTrigger(),
+    //     mobilityTask,
+    //     phone);
+    //
+    // protocol.addTaskControl(
+    //     UserTaskTrigger(
+    //         taskName: mobilityTask.name,
+    //         triggerCondition: UserTaskState.done),
+    //     mobilityTask,
+    //     phone);
+
 
     return protocol;
   }

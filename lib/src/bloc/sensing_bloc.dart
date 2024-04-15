@@ -67,6 +67,9 @@ class SensingBLoC {
 
   StudyDeploymentModel? _model;
 
+  /// The list of available app tasks for the user to address.
+  List<UserTask> get tasks => AppTaskController().userTaskQueue;
+
   /// Get the study deployment model for this app.
   StudyDeploymentModel get studyDeploymentModel =>
       _model ??= StudyDeploymentModel(deployment!);
@@ -92,6 +95,10 @@ class SensingBLoC {
   }) async {
     await Settings().init();
     Settings().debugLevel = DebugLevel.debug;
+
+    // Don't store the AppTask queue across app restart
+    Settings().saveAppTaskQueue = false;
+
     this.deploymentMode = deploymentMode;
     this.dataFormat = dataFormat;
     _resumeSensingOnStartup = resumeSensingOnStartup;

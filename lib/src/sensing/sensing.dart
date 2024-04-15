@@ -5,6 +5,7 @@ import 'package:carp_context_package/carp_context_package.dart';
 import 'package:carp_core/carp_core.dart';
 import 'package:carp_mobile_sensing/carp_mobile_sensing.dart';
 import 'package:carp_serializable/carp_serializable.dart';
+import 'package:carp_survey_package/survey.dart';
 import 'package:magicarp/src/bloc/metrics/app_usage_metrics.dart';
 import 'package:magicarp/src/bloc/metrics/message_metrics.dart';
 import 'package:magicarp/src/bloc/metrics/mobility_metrics.dart';
@@ -72,6 +73,7 @@ class Sensing {
     SamplingPackageRegistry().register(ContextSamplingPackage());
     SamplingPackageRegistry().register(AppsSamplingPackage());
     SamplingPackageRegistry().register(CommunicationSamplingPackage());
+    SamplingPackageRegistry().register(SurveySamplingPackage());
   }
 
   /// Initialize and set up sensing
@@ -105,6 +107,7 @@ class Sensing {
     // Create and configure a client manager for this phone
     client = SmartPhoneClientManager();
     await client?.configure(
+      deploymentService: deploymentService,
       deviceController: DeviceController(),
     );
 

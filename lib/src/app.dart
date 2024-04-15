@@ -4,6 +4,7 @@ import 'package:magicarp/src/ui/data_visualization_page.dart';
 import 'package:magicarp/src/ui/device_list.dart';
 import 'package:magicarp/src/ui/probe_list.dart';
 import 'package:magicarp/src/ui/study_deployment_page.dart';
+import 'package:magicarp/src/ui/task_list_page.dart';
 import 'bloc/sensing_bloc.dart';
 
 class App extends StatelessWidget {
@@ -73,7 +74,8 @@ class _CarpMobileSensingAppState extends State<CarpMobileSensingApp> {
   final _pages = [
     const StudyDeploymentPage(),
     const ProbeList(),
-    const DeviceList(),
+    //const DeviceList(),
+    const TaskList(),
     const DataVisualizationPage(),
   ];
 
@@ -92,7 +94,8 @@ class _CarpMobileSensingAppState extends State<CarpMobileSensingApp> {
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(icon: Icon(Icons.school), label: "Study"),
           BottomNavigationBarItem(icon: Icon(Icons.adb), label: "Probes"),
-          BottomNavigationBarItem(icon: Icon(Icons.watch), label: "Devices"),
+          //BottomNavigationBarItem(icon: Icon(Icons.watch), label: "Devices"),
+          BottomNavigationBarItem(icon: Icon(Icons.spellcheck), label: "Tasks"),
           BottomNavigationBarItem(icon: Icon(Icons.insert_chart), label: "Data"),
         ],
         currentIndex: _selectedIndex,
