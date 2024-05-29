@@ -38,6 +38,9 @@ class MobilityMetricsModel extends ChangeNotifier{
   /// The number of places visited on the current day
   int? get numberOfPlaces => _mobilityMetrics.numberOfPlaces;
 
+  /// The date and time of the last time this measure was collected
+  DateTime? get lastTime => _mobilityMetrics.lastTime;
+
   // Notifies listeners about changes in data
   @override
   void notifyListeners() {

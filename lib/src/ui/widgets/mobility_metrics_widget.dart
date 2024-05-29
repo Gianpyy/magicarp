@@ -13,6 +13,15 @@ class MobilityMetricsDisplayWidget extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             const Text(
+              "Last time:",
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+            ),
+            Text(
+              "${model.lastTime}",
+              style: const TextStyle(fontSize: 16),
+            ),
+            const SizedBox(height: 20),
+            const Text(
               "Distance traveled:",
               style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ),

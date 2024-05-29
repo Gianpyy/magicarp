@@ -1,7 +1,9 @@
 import 'package:carp_mobile_sensing/carp_mobile_sensing.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:magicarp/src/app.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:magicarp/src/app_old.dart';
 import 'package:magicarp/src/bloc/sensing_bloc.dart';
+import 'package:flutter_foreground_service/flutter_foreground_service.dart';
 
 void main() async{
   // Makes sure to have an instance of the WidgetsBinding, which is required

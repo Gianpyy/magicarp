@@ -6,7 +6,7 @@ import 'package:carp_mobile_sensing/carp_mobile_sensing.dart';
 import 'package:carp_survey_package/survey.dart';
 import 'package:magicarp/src/sensing/surveys.dart';
 
-/// This class configures a [SmartphoneStudyProtocol] with [Trigger]s, [TaskControl]s and [Measure]s
+/// This class configures a [SmartphoneStudyProtocol] with [TriggerConfiguration]s, [TaskControl]s and [Measure]s
 class LocalStudyProtocolManager implements StudyProtocolManager {
   @override
   Future<void> initialize() async {}
@@ -20,13 +20,13 @@ class LocalStudyProtocolManager implements StudyProtocolManager {
         // You can put anything here (as long as it is a valid UUID), and this will be replaced with
         // the ID of the user uploading the protocol.
         ownerId: "979b408d-784e-4b1b-bb1e-ff9204e072f3",
-        name: "Track something, hopefully this time will work for sure!",
+        name: "Track something, hopefully this time the app will stay opened in background!",
     );
 
     // Define the data end-point
     //protocol.dataEndPoint = SQLiteDataEndPoint();
     protocol.dataEndPoint = FileDataEndPoint(
-        bufferSize: 1000 * 1000,
+        bufferSize: 1500 * 1000,
         zip: false,
         encrypt: false,
         dataFormat: NameSpace.CARP,
@@ -73,7 +73,7 @@ class LocalStudyProtocolManager implements StudyProtocolManager {
         BackgroundTask(measures: [
           Measure(type: AppsSamplingPackage.APP_USAGE),
           Measure(type: CommunicationSamplingPackage.PHONE_LOG),
-          Measure(type: CommunicationSamplingPackage.TEXT_MESSAGE_LOG),
+          //Measure(type: CommunicationSamplingPackage.TEXT_MESSAGE_LOG),
         ]),
         phone,
     );
@@ -106,14 +106,10 @@ class LocalStudyProtocolManager implements StudyProtocolManager {
 
 
     // Define the online location service and add it as a 'connected device'
-    final locationService = LocationService(
-        accuracy: GeolocationAccuracy.high,
-        distance: 10,
-        interval: const Duration(minutes: 1));
-
+    final locationService = LocationService();
     protocol.addConnectedDevice(locationService, phone);
 
-    // Add a background task that collects location every 5 minutes
+    // Add a background task that collects location on a regular basis
     protocol.addTaskControl(
         PeriodicTrigger(period: const Duration(minutes: 5)),
         BackgroundTask(measures: [
@@ -122,9 +118,8 @@ class LocalStudyProtocolManager implements StudyProtocolManager {
         locationService);
 
     // Add a background task that continuously collects location and mobility
-    // patterns. Delays sampling by 5 minutes.
     protocol.addTaskControl(
-        DelayedTrigger(delay: const Duration(minutes: 5)),
+        ImmediateTrigger(),
         BackgroundTask(measures: [
           Measure(type: ContextSamplingPackage.LOCATION),
           Measure(type: ContextSamplingPackage.MOBILITY)
@@ -142,14 +137,13 @@ class LocalStudyProtocolManager implements StudyProtocolManager {
             minutesToComplete: surveys.demographics.minutesToComplete,
             notification: true,
             rpTask: surveys.demographics.survey,
-            //measures: [Measure(type: ContextSamplingPackage.CURRENT_LOCATION)],
         ),
         phone);
 
 
     // TEST STUFF
     protocol.addTaskControl(
-        RecurrentScheduledTrigger(type: RecurrentType.daily, time: const TimeOfDay(hour: 22, minute: 0, second: 0)),
+        RecurrentScheduledTrigger(type: RecurrentType.daily, time: const TimeOfDay(hour: 22, minute: 30, second: 0)),
         RPAppTask(
           type: SurveyUserTask.SURVEY_TYPE,
           title: surveys.dailyRecap.title,
@@ -157,32 +151,32 @@ class LocalStudyProtocolManager implements StudyProtocolManager {
           minutesToComplete: surveys.dailyRecap.minutesToComplete,
           notification: true,
           rpTask: surveys.dailyRecap.survey,
-          // measures: [
-          //   Measure(type: ContextSamplingPackage.CURRENT_LOCATION),
-          // ],
+          measures: [
+            Measure(type: ContextSamplingPackage.MOBILITY),
+          ]
         ),
         phone);
 
     // Add a task that keeps reappearing when done.
-    // var mobilityTask = AppTask(
-    //     type: BackgroundSensingUserTask.ONE_TIME_SENSING_TYPE,
-    //     title: "Mobility",
-    //     description: "Collect mobility features",
-    //     measures: [
-    //       Measure(type: ContextSamplingPackage.MOBILITY),
-    //     ]);
-    //
-    // protocol.addTaskControl(
-    //     ImmediateTrigger(),
-    //     mobilityTask,
-    //     phone);
-    //
-    // protocol.addTaskControl(
-    //     UserTaskTrigger(
-    //         taskName: mobilityTask.name,
-    //         triggerCondition: UserTaskState.done),
-    //     mobilityTask,
-    //     phone);
+    var mobilityTask = AppTask(
+        type: BackgroundSensingUserTask.ONE_TIME_SENSING_TYPE,
+        title: "Mobility",
+        description: "Collect mobility features",
+        measures: [
+          Measure(type: ContextSamplingPackage.MOBILITY),
+        ]);
+
+    protocol.addTaskControl(
+        ImmediateTrigger(),
+        mobilityTask,
+        phone);
+
+    protocol.addTaskControl(
+        UserTaskTrigger(
+            taskName: mobilityTask.name,
+            triggerCondition: UserTaskState.done),
+        mobilityTask,
+        phone);
 
 
     return protocol;

@@ -103,4 +103,7 @@ class MobilityMetrics extends ChangeNotifier {
 
   /// The number of places visited on the current day
   int? get numberOfPlaces => _numberOfPlaces;
+
+  /// The date and time of the last time this measure was collected
+  DateTime? get lastTime => MobilitySamplingConfiguration().lastTime;
 }
