@@ -11,9 +11,13 @@ import '../sensing/sensing.dart';
 
 
 class SensingBLoC {
-  static const String studyDeploymentIdKey = 'study_deployment_id';
+  static const String STUDY_ID_KEY = 'study_id';
+  static const String STUDY_DEPLOYMENT_ID_KEY = 'study_deployment_id';
+  static const String DEVICE_ROLE_NAME_KEY = 'device_role_name';
 
+  String? _studyId;
   String? _studyDeploymentId;
+  String? _deviceRoleName;
   bool _useCached = true;
   bool _resumeSensingOnStartup = false;
 
@@ -26,10 +30,27 @@ class SensingBLoC {
   /// The [Sensing] layer used in the app.
   Sensing get sensing => Sensing();
 
+  /// The study id for the currently running deployment.
+  /// Returns the study id cached locally on the phone (if available).
+  /// Returns `null` if no study is deployed (yet).
+  String? get studyId =>
+      (_studyId ??= Settings().preferences?.getString(STUDY_ID_KEY));
+
+  /// Set the study deployment id for the currently running deployment.
+  /// This study deployment id will be cached locally on the phone.
+  set studyId(String? id) {
+    assert(
+    id != null,
+    'Cannot set the study id to null in Settings. '
+        "Use the 'eraseStudyDeployment()' method to erase study deployment information.");
+    _studyId = id;
+    Settings().preferences?.setString(STUDY_ID_KEY, id!);
+  }
+
   /// The study deployment id for the currently running deployment
   /// Returns the deployment id cached locally on the phone (if available)
   String? get studyDeploymentId => (_studyDeploymentId ??=
-      Settings().preferences?.getString(studyDeploymentIdKey));
+      Settings().preferences?.getString(STUDY_DEPLOYMENT_ID_KEY));
 
   /// Set the study deployment id for the currently running deployment
   /// This study deployment id wil be cached locally on the phone
@@ -40,7 +61,7 @@ class SensingBLoC {
       "Use the 'eraseStudyDeployment()' method to erase study deployment information."
     );
     _studyDeploymentId = id;
-    Settings().preferences?.setString(studyDeploymentIdKey, id!);
+    Settings().preferences?.setString(STUDY_DEPLOYMENT_ID_KEY, id!);
   }
 
   /// Use the cached study deployment?
@@ -52,7 +73,7 @@ class SensingBLoC {
   /// Erase all study deployment information cached locally on this phone.
   Future<void> eraseStudyDeployment() async {
     _studyDeploymentId = null;
-    await Settings().preferences!.remove(studyDeploymentIdKey);
+    await Settings().preferences!.remove(STUDY_DEPLOYMENT_ID_KEY);
   }
 
   /// The [SmartphoneDeployment] deployed on this phone.
@@ -75,8 +96,24 @@ class SensingBLoC {
       _model ??= StudyDeploymentModel(deployment!);
 
   /// Get a list of running probes
-  Iterable<ProbeModel> get runningProbes =>
-      Sensing().runningProbes.map((probe) => ProbeModel(probe));
+  List<ProbeModel> get runningProbes =>
+      Sensing().runningProbes.map((probe) => ProbeModel(probe)).toList();
+
+  /// The device role name for the currently running deployment.
+  ///
+  /// The role name is cached locally on the phone.
+  /// Returns `null` if no study is deployed (yet).
+  String? get deviceRoleName => (_deviceRoleName ??=
+      Settings().preferences?.getString(DEVICE_ROLE_NAME_KEY));
+
+  set deviceRoleName(String? roleName) {
+    assert(
+    roleName != null,
+    'Cannot set device role name to null in Settings. '
+        "Use the 'eraseStudyDeployment()' method to erase study deployment information.");
+    _deviceRoleName = roleName;
+    Settings().preferences?.setString(DEVICE_ROLE_NAME_KEY, roleName!);
+  }
 
   /// Get a list of available devices
   Iterable<DeviceModel> get availableDevices =>
@@ -114,20 +151,24 @@ class SensingBLoC {
   /// Start sensing
   void start() {
     SmartPhoneClientManager().notificationController?.createNotification(
+      id: 1,
       title: 'Sensing Started',
       body:
       'Data sampling is now running in the background. Click the STOP button to stop sampling again.',
     );
+    SmartPhoneClientManager().notificationController?.cancelNotification(2);
     SmartPhoneClientManager().start();
   }
 
   /// Stop sensing
   void stop() {
     SmartPhoneClientManager().notificationController?.createNotification(
+      id: 2,
       title: 'Sensing Stopped',
       body:
       'Sampling is stopped and no more data will be collected. Click the START button to restart sampling.',
     );
+    SmartPhoneClientManager().notificationController?.cancelNotification(1);
     SmartPhoneClientManager().stop();
   }
 
@@ -151,12 +192,15 @@ final bloc = SensingBLoC();
 
 /// How to deploy a study.
 enum DeploymentMode {
-  /// Use a local study protocol & deployment and store data locally in a file.
+  /// Use a local study protocol & deployment and store data locally on the phone.
   local,
 
-  /// Use the CARP production server to get the study deployment and store data.
-  carpProduction,
+  /// Use the CAWS production server to get the study deployment and store data.
+  production,
 
-  /// Use the CARP staging server to get the study deployment and store data.
-  carpStaging,
+  /// Use the CAWS test server to get the study deployment and store data.
+  test,
+
+  /// Use the CAWS development server to get the study deployment and store data.
+  dev,
 }

@@ -26,7 +26,7 @@ class LocalStudyProtocolManager implements StudyProtocolManager {
     // Define the data end-point
     //protocol.dataEndPoint = SQLiteDataEndPoint();
     protocol.dataEndPoint = FileDataEndPoint(
-        bufferSize: 1500 * 1000,
+        bufferSize: 500 * 1000,
         zip: false,
         encrypt: false,
         dataFormat: NameSpace.CARP,
@@ -45,139 +45,53 @@ class LocalStudyProtocolManager implements StudyProtocolManager {
      * utilized in data collection.
      */
 
-    // Collect device info only once, when this study is deployed.
+    // Add a background task that continuously collects screen activity
     protocol.addTaskControl(
-      OneTimeTrigger(),
+      ImmediateTrigger(),
       BackgroundTask(
-          measures: [
-            Measure(type: DeviceSamplingPackage.DEVICE_INFORMATION),
-          ]),
-      phone,
-    );
-
-    // Automatically collect step count, screen activity,
-    // Sampling is delayed by 10 seconds.
-    protocol.addTaskControl(
-      DelayedTrigger(delay: const Duration(seconds: 10)),
-      BackgroundTask(measures: [
-        Measure(type: SensorSamplingPackage.STEP_COUNT),
-        Measure(type: DeviceSamplingPackage.SCREEN_EVENT),
+        name: "Screen events",
+        measures: [
+          Measure(type: DeviceSamplingPackage.SCREEN_EVENT),
       ]),
       phone,
     );
 
-    // Collect data about the app usage, phone calls and text messages
-    // Sampling is done 1 hour(s) after the study has begun
+    // Add a background task that continuously collects ambient light
     protocol.addTaskControl(
-        DelayedTrigger(delay: const Duration(hours: 1)),
-        BackgroundTask(measures: [
-          Measure(type: AppsSamplingPackage.APP_USAGE),
-          Measure(type: CommunicationSamplingPackage.PHONE_LOG),
-          //Measure(type: CommunicationSamplingPackage.TEXT_MESSAGE_LOG),
-        ]),
-        phone,
+      ImmediateTrigger(),
+      BackgroundTask(
+          name: "Light",
+          measures: [
+            Measure(type: SensorSamplingPackage.AMBIENT_LIGHT),
+          ]),
+      phone,
     );
 
-    //!!!! TEST !!!!!
-
-    // Add a background task that collects activity data from the phone
+    // Add a background task that continuously collects acceleration features
     protocol.addTaskControl(
-        ImmediateTrigger(),
-        BackgroundTask(measures: [
-          Measure(type: ContextSamplingPackage.ACTIVITY),
-        ]),
-        phone);
-
-    // Define the online location service and add it as a 'device'
-    // LocationService locationService = LocationService(
-    //   accuracy: GeolocationAccuracy.balanced,
-    //   distance: 1,
-    //   interval: const Duration(seconds: 10),
-    // );
-    // protocol.addConnectedDevice(locationService, phone);
-
-    // Add a background task that continuously collects mobility
-    // protocol.addTaskControl(
-    //     ImmediateTrigger(),
-    //     BackgroundTask(measures: [
-    //       Measure(type: ContextSamplingPackage.MOBILITY),
-    //     ]),
-    //     locationService);
+      ImmediateTrigger(),
+      BackgroundTask(
+          name: "Acceleration features",
+          measures: [
+            Measure(type: SensorSamplingPackage.ACCELERATION_FEATURES),
+          ]),
+      phone,
+    );
 
 
     // Define the online location service and add it as a 'connected device'
     final locationService = LocationService();
     protocol.addConnectedDevice(locationService, phone);
 
-    // Add a background task that collects location on a regular basis
-    protocol.addTaskControl(
-        PeriodicTrigger(period: const Duration(minutes: 5)),
-        BackgroundTask(measures: [
-          (Measure(type: ContextSamplingPackage.CURRENT_LOCATION)),
-        ]),
-        locationService);
-
-    // Add a background task that continuously collects location and mobility
+    // Add a background task that continuously collects location
     protocol.addTaskControl(
         ImmediateTrigger(),
-        BackgroundTask(measures: [
-          Measure(type: ContextSamplingPackage.LOCATION),
-          Measure(type: ContextSamplingPackage.MOBILITY)
-        ]),
-        locationService);
-
-
-    // Collect demographic 10 minutes after the study starts
-    protocol.addTaskControl(
-        DelayedTrigger(delay: const Duration(minutes: 10)),
-        RPAppTask(
-            type: SurveyUserTask.SURVEY_TYPE,
-            title: surveys.demographics.title,
-            description: surveys.demographics.description,
-            minutesToComplete: surveys.demographics.minutesToComplete,
-            notification: true,
-            rpTask: surveys.demographics.survey,
-        ),
-        phone);
-
-
-    // TEST STUFF
-    protocol.addTaskControl(
-        RecurrentScheduledTrigger(type: RecurrentType.daily, time: const TimeOfDay(hour: 22, minute: 30, second: 0)),
-        RPAppTask(
-          type: SurveyUserTask.SURVEY_TYPE,
-          title: surveys.dailyRecap.title,
-          description: surveys.dailyRecap.description,
-          minutesToComplete: surveys.dailyRecap.minutesToComplete,
-          notification: true,
-          rpTask: surveys.dailyRecap.survey,
+        BackgroundTask(
+          name: "Location",
           measures: [
-            Measure(type: ContextSamplingPackage.MOBILITY),
-          ]
-        ),
-        phone);
-
-    // Add a task that keeps reappearing when done.
-    var mobilityTask = AppTask(
-        type: BackgroundSensingUserTask.ONE_TIME_SENSING_TYPE,
-        title: "Mobility",
-        description: "Collect mobility features",
-        measures: [
-          Measure(type: ContextSamplingPackage.MOBILITY),
-        ]);
-
-    protocol.addTaskControl(
-        ImmediateTrigger(),
-        mobilityTask,
-        phone);
-
-    protocol.addTaskControl(
-        UserTaskTrigger(
-            taskName: mobilityTask.name,
-            triggerCondition: UserTaskState.done),
-        mobilityTask,
-        phone);
-
+            Measure(type: ContextSamplingPackage.LOCATION),
+        ]),
+        locationService);
 
     return protocol;
   }

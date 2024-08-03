@@ -1,7 +1,7 @@
 import 'dart:async';
+import 'dart:developer';
 import 'package:carp_apps_package/apps.dart';
 import 'package:carp_core/carp_core.dart';
-import 'package:carp_mobile_sensing/runtime/runtime.dart';
 import 'package:flutter/material.dart';
 import '../../sensing/sensing.dart';
 
@@ -32,22 +32,22 @@ class AppUsageMetrics extends ChangeNotifier {
   /// Process the data received by the measurements stream
   void processData(Measurement measurement) {
     AppUsage appUsage = measurement.data as AppUsage;
-    info("[AppUsageMetrics] Received data:\n");
+    log("[AppUsageMetrics] Received data:\n");
     appUsage.usage.forEach((key, appUsageInfo) {
       int duration = appUsageInfo.usage.inMinutes;
-      info("App: ${appUsageInfo.appName}, Usage(in minutes): $duration");
+      log("App: ${appUsageInfo.appName}, Usage(in minutes): $duration");
     });
     //todo: implement metrics calculation (when i'll figure out what to calculate xd)
   }
 
   /// Handle when the stream is done
   void handleDone() {
-    info("Stream done.");
+    log("Stream done.");
   }
 
   /// Handle errors in the data stream
   void handleError(error) {
-    info("Error: $error");
+    log("Error: $error");
   }
 
   /// Stop listening to the stream

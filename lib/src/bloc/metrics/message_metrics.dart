@@ -1,8 +1,7 @@
 import 'dart:async';
-import 'package:carp_apps_package/apps.dart';
+import 'dart:developer';
 import 'package:carp_communication_package/communication.dart';
 import 'package:carp_core/carp_core.dart';
-import 'package:carp_mobile_sensing/runtime/runtime.dart';
 import 'package:flutter/material.dart';
 import '../../sensing/sensing.dart';
 
@@ -33,10 +32,10 @@ class MessageMetrics extends ChangeNotifier {
   /// Process the data received by the measurements stream
   void processData(Measurement measurement) {
     TextMessageLog textMessageLog = measurement.data as TextMessageLog;
-    info("[MessageMetrics] Received data: ");
+    log("[MessageMetrics] Received data: ");
 
     for (var element in textMessageLog.textMessageLog) {
-      info("Message from ${element.address}: ${element.body}");
+      log("Message from ${element.address}: ${element.body}");
 
       //todo: implement metrics calculation (when i'll figure out what to calculate xd)
     }
@@ -44,12 +43,12 @@ class MessageMetrics extends ChangeNotifier {
 
   /// Handle when the stream is done
   void handleDone() {
-    info("Stream done.");
+    log("Stream done.");
   }
 
   /// Handle errors in the data stream
   void handleError(error) {
-    info("Error: $error");
+    log("Error: $error");
   }
 
   /// Stop listening to the stream

@@ -16,7 +16,7 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
 # In Windows, build-name is used as the major, minor, and patch parts
 # of the product and file versions while build-number is used as the build suffix.
-version: 0.0.11
+version: 0.0.12
 
 environment:
   sdk: '>=3.2.3 <4.0.0'
@@ -37,21 +37,22 @@ dependencies:
 
   # CARP packages
   carp_core: ^1.6.0 # Core package
-  carp_mobile_sensing: ^1.6.1 # Sampling Packages for Mobile Sensing on the Phone
+  carp_mobile_sensing: ^1.8.2 # Sampling Packages for Mobile Sensing on the Phone
   carp_apps_package: ^1.4.0 # App sampling package (installed apps, app usage)
   carp_communication_package: ^1.4.2 # Communication sampling package (phone, sms)
-  carp_context_package: ^1.6.0 # Context sampling package (location, activity, weather)
+  carp_context_package: ^1.7.0 # Context sampling package (location, activity, weather)
   carp_serializable: ^1.2.0  # JSON serialization package for CARP libraries
   carp_survey_package: ^1.5.0 # Create surveys, obtain consent
 
   # CARP plugins
   mobility_features: ^4.0.1 # Compute daily mobility features from location
+  location: ^6.0.1 # Location
 
   # Other
   flutter_launcher_icons: ^0.13.1
   # background_locator_2: ^2.0.6 # A Flutter plugin to request the location even if the app is killed. Sending the location to a dart function in background, also provide a meter filter
   flutter_foreground_service: ^0.4.1 # Foreground service for the Android platform, keeps app running even when in background.
-  flutter_foreground_task: ^6.2.0 # This plugin is used to implement a foreground service on the Android platform.
+  flutter_foreground_task: ^7.1.0 # This plugin is used to implement a foreground service on the Android platform.
   json_annotation: ^4.8.1
   provider: ^6.1.1
   research_package: ^1.5.0

@@ -1,9 +1,8 @@
 import 'dart:async';
+import 'dart:developer';
 import 'package:carp_context_package/carp_context_package.dart';
 import 'package:carp_core/carp_core.dart';
-import 'package:carp_mobile_sensing/runtime/runtime.dart';
 import 'package:flutter/material.dart';
-import '../../sensing/sensing.dart';
 import '../sensing_bloc.dart';
 
 class MobilityMetrics extends ChangeNotifier {
@@ -53,7 +52,7 @@ class MobilityMetrics extends ChangeNotifier {
 
   /// Process the data received by the measurements stream
   void processData(Measurement measurement) {
-    info("[MobilityMetrics] Received data: $measurement");
+    log("[MobilityMetrics] Received data: $measurement");
 
     Mobility mobility = measurement as Mobility;
 
@@ -71,12 +70,12 @@ class MobilityMetrics extends ChangeNotifier {
 
   /// Handle when the stream is done
   void handleDone() {
-    info("Stream done.");
+    log("Stream done.");
   }
 
   /// Handle errors in the data stream
   void handleError(error) {
-    info("Error: $error");
+    log("Error: $error");
   }
 
   /// Stop listening to the stream

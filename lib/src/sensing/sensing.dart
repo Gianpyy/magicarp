@@ -74,11 +74,6 @@ class Sensing {
     SamplingPackageRegistry().register(AppsSamplingPackage());
     SamplingPackageRegistry().register(CommunicationSamplingPackage());
     SamplingPackageRegistry().register(SurveySamplingPackage());
-
-    // Set-up of MobilitySamplingConfiguration
-    MobilitySamplingConfiguration().stopRadius = 5.0;
-    MobilitySamplingConfiguration().placeRadius = 50.0;
-    MobilitySamplingConfiguration().stopDuration = const Duration(minutes: 3);
   }
 
   /// Initialize and set up sensing

@@ -169,7 +169,7 @@ class _CarpMobileSensingAppState extends State<CarpMobileSensingApp> {
     const ProbeList(),
     //const DeviceList(),
     const TaskList(),
-    const DataVisualizationPage(),
+    //const DataVisualizationPage(),
   ];
 
   Future<void> _requestPermissionForAndroid() async {
@@ -210,17 +210,11 @@ class _CarpMobileSensingAppState extends State<CarpMobileSensingApp> {
   void _initForegroundTask() {
     FlutterForegroundTask.init(
       androidNotificationOptions: AndroidNotificationOptions(
-        foregroundServiceType: AndroidForegroundServiceType.LOCATION,
         channelId: 'foreground_service',
         channelName: 'Foreground Service Notification',
         channelDescription: 'This notification appears when the foreground service is running.',
         channelImportance: NotificationChannelImportance.LOW,
         priority: NotificationPriority.LOW,
-        iconData: const NotificationIconData(
-          resType: ResourceType.mipmap,
-          resPrefix: ResourcePrefix.ic,
-          name: 'launcher',
-        ),
       ),
       iosNotificationOptions: const IOSNotificationOptions(
         showNotification: true,
@@ -256,6 +250,11 @@ class _CarpMobileSensingAppState extends State<CarpMobileSensingApp> {
       return FlutterForegroundTask.startService(
         notificationTitle: 'Foreground Service is running',
         notificationText: 'Tap to return to the app',
+        notificationIcon: const NotificationIconData(
+          resType: ResourceType.mipmap,
+          resPrefix: ResourcePrefix.ic,
+          name: 'launcher',
+        ),
         callback: startCallback,
       );
     }
@@ -327,7 +326,7 @@ class _CarpMobileSensingAppState extends State<CarpMobileSensingApp> {
               BottomNavigationBarItem(icon: Icon(Icons.adb), label: "Probes"),
               //BottomNavigationBarItem(icon: Icon(Icons.watch), label: "Devices"),
               BottomNavigationBarItem(icon: Icon(Icons.spellcheck), label: "Tasks"),
-              BottomNavigationBarItem(icon: Icon(Icons.insert_chart), label: "Data"),
+              //BottomNavigationBarItem(icon: Icon(Icons.insert_chart), label: "Data"),
             ],
             currentIndex: _selectedIndex,
             type: BottomNavigationBarType.fixed,
