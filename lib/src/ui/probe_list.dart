@@ -17,7 +17,7 @@ class _ProbeListState extends State<ProbeList> {
   @override
   Widget build(BuildContext context) {
     Iterable<Widget> probes = ListTile.divideTiles(
-        tiles: bloc.runningProbes.map<Widget>((probe) => _buildProbeListTile(probe))
+        tiles: sensingBloc.runningProbes.map<Widget>((probe) => _buildProbeListTile(probe))
     );
 
     return Scaffold(

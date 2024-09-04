@@ -39,7 +39,7 @@ class MobilityMetrics extends ChangeNotifier {
 
   /// Start listening to screen events from the measurements stream
   void startListening() {
-    _subscription = bloc.sensing.controller!.measurements
+    _subscription = sensingBloc.sensing.controller!.measurements
         .where((measurement) => measurement.data.format.toString() == ContextSamplingPackage.MOBILITY)
         .listen((data) {
       processData(data);

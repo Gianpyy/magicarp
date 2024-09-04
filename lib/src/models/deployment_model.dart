@@ -18,17 +18,17 @@ class StudyDeploymentModel {
 
   /// Events on the state of the study executor
   Stream<ExecutorState> get studyExecutorStateEvents =>
-      bloc.sensing.controller!.executor.stateEvents;
+      sensingBloc.sensing.controller!.executor.stateEvents;
 
   /// Current state of the study executor (e.g., resumed, paused, ...)
-  ExecutorState get studyState => bloc.sensing.controller!.executor.state;
+  ExecutorState get studyState => sensingBloc.sensing.controller!.executor.state;
 
   /// Get all sensing events (i.e. all [Measurement] objects being collected).
   Stream<Measurement> get measurements =>
-      bloc.sensing.controller?.measurements ?? const Stream.empty();
+      sensingBloc.sensing.controller?.measurements ?? const Stream.empty();
 
   /// The total sampling size so far since this study was started.
-  int get samplingSize => bloc.sensing.controller!.samplingSize;
+  int get samplingSize => sensingBloc.sensing.controller!.samplingSize;
 
   StudyDeploymentModel(this.deployment) : super();
 }

@@ -1,4 +1,4 @@
-import 'package:carp_mobile_sensing/runtime/runtime.dart';
+import 'package:carp_mobile_sensing/runtime.dart';
 import 'package:carp_survey_package/survey.dart';
 import 'package:flutter/material.dart';
 import 'package:magicarp/src/ui/colors.dart';
@@ -20,7 +20,7 @@ class TaskListState extends State<TaskList> {
 
   @override
   Widget build(BuildContext context) {
-    List<UserTask> tasks = bloc.tasks.reversed.toList();
+    List<UserTask> tasks = sensingBloc.tasks.reversed.toList();
 
     return Scaffold(
       key: scaffoldKey,

@@ -4,6 +4,7 @@ import 'dart:io';
 import 'dart:isolate';
 import 'package:flutter/material.dart';
 import 'package:flutter_foreground_task/flutter_foreground_task.dart';
+import 'package:magicarp/src/bloc/connectivity_bloc.dart';
 import 'package:magicarp/src/ui/data_visualization_page.dart';
 import 'package:magicarp/src/ui/probe_list.dart';
 import 'package:magicarp/src/ui/study_deployment_page.dart';
@@ -96,7 +97,10 @@ class LoadingPage extends StatelessWidget {
   /// * start sensing
   Future<bool> init(BuildContext context) async {
     // Initialize the study
-    await bloc.sensing.initialize();
+    await sensingBloc.sensing.initialize();
+
+    // Initialize the connectivity bloc
+    await connectivityBloc.initialize();
 
     // Save the bloc
     //await FlutterForegroundTask.saveData(key: 'bloc', value: bloc);
@@ -335,7 +339,7 @@ class _CarpMobileSensingAppState extends State<CarpMobileSensingApp> {
           floatingActionButton: FloatingActionButton(
             onPressed: _restart,
             tooltip: "Restart study & probes",
-            child: bloc.isRunning ? const Icon(Icons.pause) : const Icon(Icons.play_arrow),
+            child: sensingBloc.isRunning ? const Icon(Icons.pause) : const Icon(Icons.play_arrow),
           ),
         ),
     );
@@ -347,12 +351,12 @@ class _CarpMobileSensingAppState extends State<CarpMobileSensingApp> {
 
   void _restart() {
     setState(() {
-      if (bloc.isRunning) {
+      if (sensingBloc.isRunning) {
         log("Stop button pressed");
-        bloc.stop();
+        sensingBloc.stop();
         _stopForegroundTask();
       } else {
-        bloc.start();
+        sensingBloc.start();
         log("Start button pressed");
         _startForegroundTask();
       }

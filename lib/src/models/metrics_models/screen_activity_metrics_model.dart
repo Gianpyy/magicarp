@@ -4,7 +4,7 @@ import 'package:magicarp/src/bloc/sensing_bloc.dart';
 
 class ScreenActivityMetricsModel extends ChangeNotifier{
   // Get the singleton instance of ScreenActivityMetrics
-  static final ScreenActivityMetrics _screenActivityMetrics = bloc.screenActivityMetrics;
+  static final ScreenActivityMetrics _screenActivityMetrics = sensingBloc.screenActivityMetrics;
 
   // Singleton
   static final ScreenActivityMetricsModel _instance = ScreenActivityMetricsModel._internal();

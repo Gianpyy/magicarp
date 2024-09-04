@@ -18,7 +18,7 @@ void main() async{
   //  * local
   //  * carpStaging
   //  * carpProduction
-  await bloc.initialize(
+  await sensingBloc.initialize(
     deploymentMode: DeploymentMode.local,
     useCachedStudyDeployment: false,
     resumeSensingOnStartup: false,

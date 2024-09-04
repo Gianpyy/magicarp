@@ -188,7 +188,7 @@ class SensingBLoC {
   MobilityMetrics get mobilityMetrics => _mobilityMetrics;
 }
 
-final bloc = SensingBLoC();
+final sensingBloc = SensingBLoC();
 
 /// How to deploy a study.
 enum DeploymentMode {

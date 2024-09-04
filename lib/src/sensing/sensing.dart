@@ -1,5 +1,8 @@
+import 'dart:convert';
 import 'dart:developer';
 import 'package:carp_apps_package/apps.dart';
+import 'package:carp_audio_package/media.dart';
+import 'package:http/http.dart' as http;
 import 'package:carp_communication_package/communication.dart';
 import 'package:carp_context_package/carp_context_package.dart';
 import 'package:carp_core/carp_core.dart';
@@ -25,15 +28,21 @@ import '../bloc/sensing_bloc.dart';
 ///
 /// Works as a singleton, and can be accessed by `Sensing()`.
 class Sensing {
-  static final Sensing _instance = Sensing._();
+  static final Sensing _instance = Sensing._([]);
   StudyDeploymentStatus? _status;
   SmartphoneDeploymentController? _controller;
 
   DeploymentService? deploymentService;
   SmartPhoneClientManager? client;
 
+  /// The URI address of the server
+  static const String _URI_ADDRESS = "";
+
   /// The study running on this phone
   Study? study;
+
+  /// The data buffer to send to the server
+  final List<Map<String, dynamic>> _dataBuffer;
 
   /// Get the latest status of the study deployment.
   StudyDeploymentStatus? get status => _status;
@@ -62,11 +71,14 @@ class Sensing {
   List<DeviceManager>? get connectedDevices =>
       SmartPhoneClientManager().deviceController.connectedDevices.toList();
 
+  /// Is the buffer empty?
+  bool get isBufferEmpty => _dataBuffer.isEmpty;
+
   /// The singleton sensing instance
   factory Sensing() => _instance;
 
   // Create and register external sampling packages
-  Sensing._() : super() {
+  Sensing._(this._dataBuffer) : super() {
     CarpMobileSensing.ensureInitialized();
 
     // Create and register external sampling packages
@@ -74,6 +86,7 @@ class Sensing {
     SamplingPackageRegistry().register(AppsSamplingPackage());
     SamplingPackageRegistry().register(CommunicationSamplingPackage());
     SamplingPackageRegistry().register(SurveySamplingPackage());
+    SamplingPackageRegistry().register(MediaSamplingPackage());
   }
 
   /// Initialize and set up sensing
@@ -93,11 +106,11 @@ class Sensing {
     _status = await SmartphoneDeploymentService().createStudyDeployment(
       protocol,
       [],
-      bloc.studyDeploymentId,
+      sensingBloc.studyDeploymentId,
     );
 
     // Save the correct deployment id on the phone for later use
-    bloc.studyDeploymentId = _status!.studyDeploymentId;
+    sensingBloc.studyDeploymentId = _status!.studyDeploymentId;
 
     // Register the CARP data manager for uploading data back to CARP.
     // This is needed in both LOCAL and CARP deployments, since a local study
@@ -113,7 +126,7 @@ class Sensing {
 
     // Define the study and add it to the client.
     study = Study(
-      bloc.studyDeploymentId!,
+      sensingBloc.studyDeploymentId!,
       deviceRolename!,
     );
     await client?.addStudy(study!.studyDeploymentId, study!.deviceRoleName);
@@ -126,16 +139,26 @@ class Sensing {
     // If not deployed before (i.e., cached) the study deployment will be
     // fetched from the deployment service.
     _controller = client?.getStudyRuntime(study!);
-    await controller?.tryDeployment(useCached: bloc.useCachedStudyDeployment);
+    await controller?.tryDeployment(useCached: sensingBloc.useCachedStudyDeployment);
 
     // Configure the controller
     await controller?.configure();
 
     // Start sampling
-    controller?.start(bloc.resumeSensingOnStartup);
+    controller?.start(sensingBloc.resumeSensingOnStartup);
 
-    // Listen to the data stream and print the data as json to the debug console
-    client?.measurements.listen((measurement) => log("${toJsonString(measurement)}\n"));
+    // Listen to the data stream
+    client?.measurements.listen((measurement){
+      // Convert data into json
+      final jsonString = toJsonString(measurement);
+
+      // Add the data to the buffer
+      final Map<String, dynamic> jsonData = jsonDecode(jsonString);
+      _dataBuffer.add(jsonData);
+
+      // Print the data as json to the debug console
+      log("$jsonString\n");
+    });
 
     info('$runtimeType initialized');
 
@@ -143,24 +166,56 @@ class Sensing {
     _initializeMetrics();
   }
 
+  /// Send data to the server
+  Future<void> sendDataToServer() async {
+    if (_dataBuffer.isEmpty) {
+      log("[SERVER] No data to send");
+      return;
+    }
+
+    final url = Uri.parse(_URI_ADDRESS);
+
+    for (var data in _dataBuffer) {
+      try {
+        final response = await http.post(
+          url,
+          headers: {'Content-Type': 'application/json'},
+          body: jsonEncode(data),
+        );
+
+        if (response.statusCode == 200) {
+          info("[SERVER] Data sent to server successfully");
+        } else {
+          info("[SERVER] There was an error while sending data");
+        }
+
+      } catch (e) {
+        info(e.toString());
+        return;
+      }
+    }
+
+    _dataBuffer.clear();
+  }
+
   void _initializeMetrics() {
     // Initialize Screen Activity metrics
-    ScreenActivityMetrics screenActivityMetrics = bloc.screenActivityMetrics;
+    ScreenActivityMetrics screenActivityMetrics = sensingBloc.screenActivityMetrics;
     screenActivityMetrics.startListening();
     info("ScreenActivityMetrics initialized");
 
     // Initialize App Usage metrics
-    AppUsageMetrics appUsageMetrics = bloc.appUsageMetrics;
+    AppUsageMetrics appUsageMetrics = sensingBloc.appUsageMetrics;
     appUsageMetrics.startListening();
     info("AppUsageMetrics initialized");
 
     // Initialize MessageMetrics
-    MessageMetrics messageMetrics = bloc.messageMetrics;
+    MessageMetrics messageMetrics = sensingBloc.messageMetrics;
     messageMetrics.startListening();
     info("MessageMetrics initialized");
 
     // Initialize MobilityMetrics
-    MobilityMetrics mobilityMetrics = bloc.mobilityMetrics;
+    MobilityMetrics mobilityMetrics = sensingBloc.mobilityMetrics;
     mobilityMetrics.startListening();
     info("MobilityMetrics initialized");
   }

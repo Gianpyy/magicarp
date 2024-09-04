@@ -17,7 +17,7 @@ class _DeviceListState extends State<DeviceList> {
 
   @override
   Widget build(BuildContext context) {
-    List<DeviceModel> devices = bloc.connectedDevices.toList();
+    List<DeviceModel> devices = sensingBloc.connectedDevices.toList();
 
     return Scaffold(
       key: scaffoldKey,
@@ -69,7 +69,7 @@ class _DeviceListState extends State<DeviceList> {
                   const Divider(),
                   TextButton(
                     child: const Text("Connect to this device"),
-                    onPressed: () => bloc.connectToDevice(device),
+                    onPressed: () => sensingBloc.connectToDevice(device),
                   ),
                 ],
               )

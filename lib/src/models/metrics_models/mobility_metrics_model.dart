@@ -4,7 +4,7 @@ import '../../bloc/sensing_bloc.dart';
 
 class MobilityMetricsModel extends ChangeNotifier{
   // Get the singleton instance of ScreenActivityMetrics
-  static final MobilityMetrics _mobilityMetrics = bloc.mobilityMetrics;
+  static final MobilityMetrics _mobilityMetrics = sensingBloc.mobilityMetrics;
 
   // Singleton
   static final MobilityMetricsModel _instance = MobilityMetricsModel._internal();
