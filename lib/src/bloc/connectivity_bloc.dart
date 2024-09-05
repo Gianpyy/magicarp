@@ -1,6 +1,8 @@
 import 'dart:async';
 import 'dart:developer';
+import 'dart:io';
 import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:http/http.dart' as http;
 import '../sensing/sensing.dart';
 
 /// A class that handles the state of the network on the phone
@@ -31,11 +33,38 @@ class ConnectivityBloC {
   /// Handle connectivity changes
   void _handleConnectivityChange(List<ConnectivityResult> result) async {
     if (result.contains(ConnectivityResult.wifi)) {
-      log("[INFO] Connected to WiFi, sending data to server");
-      _startSendingDataPeriodically();
+      log("[INFO] Connected to WiFi");
+      if (await _hasInternetAccess()) {
+        log("[INFO] WiFi has internet access, sending data to server");
+        _startSendingDataPeriodically();
+      } else {
+        log("[INFO] WiFi has no access to the internet");
+      }
     } else {
       log("[INFO] Not connected to WiFi, stopping sending data to server");
       _stopSendingData();
+    }
+  }
+
+  /// Check if the WiFi connection has internet access
+  Future<bool> _hasInternetAccess() async {
+    // Check for connectivity changes
+    final List<ConnectivityResult> connectivityResult = await (Connectivity().checkConnectivity());
+
+    if (connectivityResult.contains(ConnectivityResult.wifi)) {
+      try {
+        // Make a GET request to Google.com to see if there's internet access
+        final result = await http.get(Uri.parse("https://www.google.com")).timeout(const Duration(seconds: 5));
+        if (result.statusCode == 200) {
+          return true; // Connected to the internet
+        } else {
+          return false; // No connection or HTTP error
+        }
+      } on SocketException catch (_) {
+        return false; // No internet access
+      }
+    } else {
+      return false; // No WiFi connection
     }
   }
 
@@ -43,7 +72,12 @@ class ConnectivityBloC {
   void _startSendingDataPeriodically() {
     // Send data in 30 seconds intervals
     _dataSendTimer = Timer.periodic(const Duration(seconds: 30), (Timer timer) async {
-      await Sensing().sendDataToServer();
+      if (await _hasInternetAccess()) {
+        log("[INFO] WiFi has internet access, sending data to server");
+        await Sensing().sendDataToServer();
+      } else {
+        log("[INFO] WiFi has no access to the internet");
+      }
     });
   }
 
@@ -59,8 +93,12 @@ class ConnectivityBloC {
       List<ConnectivityResult> result = await (Connectivity().checkConnectivity());
 
       if (result.contains(ConnectivityResult.wifi)) {
-        log("[INFO] Sending remaining data to server");
-        await Sensing().sendDataToServer();
+        if (await _hasInternetAccess()){
+          log("[INFO] Sending remaining data to server");
+          await Sensing().sendDataToServer();
+        } else {
+          log("[INFO] WiFi has no access to the internet, remaining data wil be lost :(");
+        }
       } else {
         log("[INFO] No WiFi connection, remaining data will be lost :(");
       }
