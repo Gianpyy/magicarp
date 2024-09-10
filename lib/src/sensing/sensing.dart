@@ -13,7 +13,7 @@ import 'package:magicarp/src/bloc/metrics/app_usage_metrics.dart';
 import 'package:magicarp/src/bloc/metrics/message_metrics.dart';
 import 'package:magicarp/src/bloc/metrics/mobility_metrics.dart';
 import 'package:magicarp/src/sensing/protocol.dart';
-
+import '../bloc/utilities/user_manager.dart';
 import '../bloc/metrics/screen_activity_metrics.dart';
 import '../bloc/sensing_bloc.dart';
 
@@ -154,6 +154,17 @@ class Sensing {
 
       // Add the data to the buffer
       final Map<String, dynamic> jsonData = jsonDecode(jsonString);
+
+      // Trim the measure type
+      String measureType = jsonData["data"]["__type"];
+      List<String> measureTypeSplitted = measureType.split(".");
+      jsonData["data"]["__type"] = measureTypeSplitted.last;
+
+      // Add UserID to data
+      UserManager userManager = UserManager();
+      String userId = await userManager.getUserId();
+      jsonData['userId'] = userId;
+
       _dataBuffer.add(jsonData);
 
       // Print the data as json to the debug console
