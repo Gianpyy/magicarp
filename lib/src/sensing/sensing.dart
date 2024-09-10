@@ -13,7 +13,7 @@ import 'package:magicarp/src/bloc/metrics/app_usage_metrics.dart';
 import 'package:magicarp/src/bloc/metrics/message_metrics.dart';
 import 'package:magicarp/src/bloc/metrics/mobility_metrics.dart';
 import 'package:magicarp/src/sensing/protocol.dart';
-
+import '../bloc/utilities/user_manager.dart';
 import '../bloc/metrics/screen_activity_metrics.dart';
 import '../bloc/sensing_bloc.dart';
 
@@ -36,7 +36,7 @@ class Sensing {
   SmartPhoneClientManager? client;
 
   /// The URI address of the server
-  static const String _URI_ADDRESS = "";
+  static const String _URI_ADDRESS = "http://10.0.2.2:5000/data"; //192.168.1.157
 
   /// The study running on this phone
   Study? study;
@@ -148,12 +148,23 @@ class Sensing {
     controller?.start(sensingBloc.resumeSensingOnStartup);
 
     // Listen to the data stream
-    client?.measurements.listen((measurement){
+    client?.measurements.listen((measurement) async {
       // Convert data into json
       final jsonString = toJsonString(measurement);
 
       // Add the data to the buffer
       final Map<String, dynamic> jsonData = jsonDecode(jsonString);
+
+      // Trim the measure type
+      String measureType = jsonData["data"]["__type"];
+      List<String> measureTypeSplitted = measureType.split(".");
+      jsonData["data"]["__type"] = measureTypeSplitted.last;
+
+      // Add UserID to data
+      UserManager userManager = UserManager();
+      String userId = await userManager.getUserId();
+      jsonData['userId'] = userId;
+
       _dataBuffer.add(jsonData);
 
       // Print the data as json to the debug console
@@ -175,6 +186,7 @@ class Sensing {
 
     final url = Uri.parse(_URI_ADDRESS);
 
+    // Send data to server
     for (var data in _dataBuffer) {
       try {
         final response = await http.post(
