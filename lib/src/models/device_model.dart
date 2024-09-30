@@ -1,10 +1,11 @@
+import 'package:carp_context_package/carp_context_package.dart';
 import 'package:carp_core/carp_core.dart';
 import 'package:carp_mobile_sensing/carp_mobile_sensing.dart';
 import 'package:flutter/material.dart';
 
 import '../ui/colors.dart';
 
-
+/// A view model for [DeviceManager]
 class DeviceModel {
   DeviceManager deviceManager;
   String? get type => deviceManager.type;
@@ -21,7 +22,7 @@ class DeviceModel {
   String get description => '${deviceTypeDescription[type!]} - $statusString'
       '${(deviceManager is HardwareDeviceManager && batteryLevel != null) ? '\n$batteryLevel% battery remaining.' : ''}';
 
-  String get statusString => status.toString().split('.').last;
+  String get statusString => status.name;
 
   /// The battery level of this device, if known.
   int? get batteryLevel => deviceManager is HardwareDeviceManager
@@ -40,7 +41,7 @@ class DeviceModel {
     Smartphone.DEVICE_TYPE: 'Phone',
     // ESenseDevice.DEVICE_TYPE: 'eSense',
     // PolarDevice.DEVICE_TYPE: 'Polar',
-    // LocationService.DEVICE_TYPE: 'Location',
+    LocationService.DEVICE_TYPE: 'Location',
     // AirQualityService.DEVICE_TYPE: 'Air Quality',
     // WeatherService.DEVICE_TYPE: 'Weather',
   };
@@ -49,7 +50,7 @@ class DeviceModel {
     Smartphone.DEVICE_TYPE: 'This phone',
     // ESenseDevice.DEVICE_TYPE: 'eSense Ear Plug',
     // PolarDevice.DEVICE_TYPE: 'Polar HR Monitor',
-    // LocationService.DEVICE_TYPE: 'Location Service',
+    LocationService.DEVICE_TYPE: 'Location Service',
     // AirQualityService.DEVICE_TYPE: 'World Air Quality Service',
     // WeatherService.DEVICE_TYPE: 'Open Weather Service',
   };
@@ -60,8 +61,7 @@ class DeviceModel {
     // Icon(Icons.headset, size: 50, color: CACHET.CACHET_BLUE),
     // PolarDevice.DEVICE_TYPE:
     // Icon(Icons.monitor_heart, size: 50, color: CACHET.RED),
-    // LocationService.DEVICE_TYPE:
-    // Icon(Icons.location_on, size: 50, color: CACHET.GREEN),
+    LocationService.DEVICE_TYPE: const Icon(Icons.location_on, size: 50, color: CACHET.GREEN),
     // AirQualityService.DEVICE_TYPE:
     // Icon(Icons.air, size: 50, color: CACHET.LIGHT_GREEN),
     // WeatherService.DEVICE_TYPE:

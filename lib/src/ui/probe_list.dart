@@ -17,9 +17,8 @@ class _ProbeListState extends State<ProbeList> {
   @override
   Widget build(BuildContext context) {
     Iterable<Widget> probes = ListTile.divideTiles(
-        context: context,
-        tiles: bloc.runningProbes
-            .map<Widget>((probe) => _buildProbeListTile(context, probe)));
+        tiles: sensingBloc.runningProbes.map<Widget>((probe) => _buildProbeListTile(probe))
+    );
 
     return Scaffold(
       key: scaffoldKey,
@@ -47,24 +46,13 @@ class _ProbeListState extends State<ProbeList> {
     );
   }
 
-  Widget _buildProbeListTile(BuildContext context, ProbeModel probe) {
-    return StreamBuilder<ExecutorState>(
-      stream: probe.stateEvents,
-      initialData: ExecutorState.created,
-      builder: (context, AsyncSnapshot<ExecutorState> snapshot) {
-        if (snapshot.hasData) {
-          return ListTile(
-            isThreeLine: true,
-            leading: probe.icon,
-            title: Text(probe.name),
-            subtitle: Text(probe.description),
-            trailing: probe.stateIcon,
-          );
-        } else if (snapshot.hasError) {
-          return Text('Error in probe state - ${snapshot.error}');
-        }
-        return const Text('Unknown');
-      },
+  Widget _buildProbeListTile(ProbeModel probe) {
+    return ListTile(
+      isThreeLine: true,
+      leading: probe.icon,
+      title: Text(probe.name ?? "Unknown"),
+      subtitle: Text(probe.description ?? "..."),
+      trailing: probe.stateIcon,
     );
   }
 
