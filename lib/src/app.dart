@@ -169,10 +169,10 @@ class _CarpMobileSensingAppState extends State<CarpMobileSensingApp> {
   ReceivePort? _receivePort;
 
   final _pages = [
-    const StudyDeploymentPage(),
-    const ProbeList(),
+    StudyDeploymentPage(model: sensingBloc.studyDeploymentModel),
+    ProbeListPage(probes: sensingBloc.runningProbes),
     //const DeviceList(),
-    const TaskList(),
+    const TaskListPage(),
     //const DataVisualizationPage(),
   ];
 
@@ -326,8 +326,8 @@ class _CarpMobileSensingAppState extends State<CarpMobileSensingApp> {
           body: _pages[_selectedIndex],
           bottomNavigationBar: BottomNavigationBar(
             items: const <BottomNavigationBarItem>[
-              BottomNavigationBarItem(icon: Icon(Icons.school), label: "Study"),
-              BottomNavigationBarItem(icon: Icon(Icons.adb), label: "Probes"),
+              BottomNavigationBarItem(icon: Icon(Icons.sms_failed_outlined), label: "About"),
+              BottomNavigationBarItem(icon: Icon(Icons.adb), label: "Sensors"),
               //BottomNavigationBarItem(icon: Icon(Icons.watch), label: "Devices"),
               BottomNavigationBarItem(icon: Icon(Icons.spellcheck), label: "Tasks"),
               //BottomNavigationBarItem(icon: Icon(Icons.insert_chart), label: "Data"),

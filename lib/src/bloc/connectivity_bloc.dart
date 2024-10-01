@@ -7,7 +7,7 @@ import '../sensing/sensing.dart';
 
 /// A class that handles the state of the network on the phone
 /// and sends data to the server when connected to WiFi
-class ConnectivityBloC {
+class ConnectivityBLoC {
 
   Timer? _dataSendTimer;
   StreamSubscription<List<ConnectivityResult>>? _subscription;
@@ -112,4 +112,4 @@ class ConnectivityBloC {
   }
 }
 
-final connectivityBloc = ConnectivityBloC();
+final connectivityBloc = ConnectivityBLoC();

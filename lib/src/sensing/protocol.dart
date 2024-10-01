@@ -106,7 +106,7 @@ class LocalStudyProtocolManager implements StudyProtocolManager {
         Control.Start,
       )
       ..addTaskControl(
-        DelayedTrigger(delay: const Duration(hours: 10)),
+        DelayedTrigger(delay: const Duration(hours: 1)),
         audioTask,
         phone,
         Control.Stop,

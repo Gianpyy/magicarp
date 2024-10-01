@@ -1,248 +1,104 @@
 import 'package:carp_core/carp_core.dart';
 import 'package:carp_mobile_sensing/carp_mobile_sensing.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:magicarp/src/models/deployment_model.dart';
 
 import '../bloc/sensing_bloc.dart';
 import 'colors.dart';
 
-class StudyDeploymentPage extends StatefulWidget {
-  const StudyDeploymentPage({super.key});
-  static const String routeName = "/study";
+class StudyDeploymentPage extends StatelessWidget {
+  final StudyDeploymentModel model;
+
+  const StudyDeploymentPage({super.key, required this.model});
 
   @override
-  State<StudyDeploymentPage> createState() => _StudyDeploymentPageState(sensingBloc.studyDeploymentModel);
-}
-
-class _StudyDeploymentPageState extends State<StudyDeploymentPage> {
-  static final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
-  final double _appBarHeight = 256.0;
-
-  final StudyDeploymentModel studyDeploymentModel;
-
-  _StudyDeploymentPageState(this.studyDeploymentModel) : super();
-
-  @override
-  Widget build(BuildContext context) => _buildStudyVisualization(context, sensingBloc.studyDeploymentModel);
-
-  Widget _buildStudyVisualization(BuildContext context, StudyDeploymentModel studyDeploymentModel) {
+  Widget build(BuildContext context) {
     return Scaffold(
-      key: _scaffoldKey,
       body: CustomScrollView(
         slivers: <Widget>[
           SliverAppBar(
-            expandedHeight: _appBarHeight,
+            expandedHeight: 250.0,
             pinned: true,
-            floating: false,
-            snap: false,
-            actions: <Widget>[
-              IconButton(
-                icon: Icon(Theme.of(context).platform == TargetPlatform.iOS ? Icons.more_horiz : Icons.more_vert),
-                tooltip: "Settings",
-                onPressed: _showSettings,
-              ),
-            ],
             flexibleSpace: FlexibleSpaceBar(
-              title: Text(studyDeploymentModel.title),
+              title: Text(model.title),
               background: Stack(
                 fit: StackFit.expand,
                 children: <Widget>[
-                  studyDeploymentModel.image,
+                  model.image,
+                  const DecoratedBox(
+                    decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                        begin: Alignment(0.0, 0.5),
+                        end: Alignment(0.0, 0.0),
+                        colors: <Color>[
+                          Color(0x60000000),
+                          Color(0x00000000),
+                        ],
+                      ),
+                    ),
+                  ),
                 ],
               ),
             ),
           ),
           SliverList(
-              delegate: SliverChildListDelegate(
-                _buildStudyPanel(context, studyDeploymentModel),
-              )
+            delegate: SliverChildListDelegate(
+              [
+                Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        "Study Overview",
+                        style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      const SizedBox(height: 10),
+                      Text(
+                        model.description,
+                        style: Theme.of(context).textTheme.bodyLarge,
+                      ),
+                      const SizedBox(height: 20),
+                      _buildDetailRow("Study Deployment ID", model.studyDeploymentId),
+                      _buildDetailRow("User ID", model.userID),
+                      _buildDetailRow("Data Endpoint", model.dataEndpoint),
+                      const SizedBox(height: 20),
+                      Text(
+                        "Sampling Information",
+                        style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      const SizedBox(height: 10),
+                      _buildDetailRow("Sampling Size", model.samplingSize.toString()),
+                      _buildDetailRow("Study State", model.studyState.name),
+                    ],
+                  ),
+                ),
+              ],
+            ),
           ),
         ],
       ),
     );
   }
 
-  List<Widget> _buildStudyPanel(BuildContext context, StudyDeploymentModel studyDeploymentModel) {
-    List<Widget> children = [];
-
-    children.add(AnnotatedRegion<SystemUiOverlayStyle>(
-      value: SystemUiOverlayStyle.dark,
-      child: _buildStudyControllerPanel(context, studyDeploymentModel),
-    ));
-
-    for (var task in studyDeploymentModel.deployment.tasks) {
-      children.add(_TaskPanel(task: task));
-    }
-
-    return children;
-  }
-
-  Widget _buildStudyControllerPanel(BuildContext context, StudyDeploymentModel studyDeploymentModel) {
-    final ThemeData themeData = Theme.of(context);
-
-    return Container(
-      padding: const EdgeInsets.symmetric(vertical: 16.0),
-      decoration: BoxDecoration(
-        border: Border(bottom: BorderSide(color: themeData.dividerColor)),
-      ),
-      child: DefaultTextStyle(
-        style: Theme.of(context).textTheme.titleMedium!,
-        child: SafeArea(
-          top: false,
-          bottom: false,
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              Container(
-                padding: const EdgeInsets.symmetric(vertical: 24.0),
-                width: 72.0,
-                child: const Icon(Icons.settings, size: 50, color: Colors.blueAccent),
-              ),
-               Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      _StudyControllerLine(studyDeploymentModel.title, heading: "Title "),
-                      _StudyControllerLine(studyDeploymentModel.description),
-                      _StudyControllerLine(studyDeploymentModel.studyDeploymentId, heading: "Deployment ID "),
-                      _StudyControllerLine(studyDeploymentModel.userID, heading: "User "),
-                      _StudyControllerLine(studyDeploymentModel.dataEndpoint, heading: "Data Endpoint "),
-                      StreamBuilder<ExecutorState>(
-                        stream: studyDeploymentModel.studyExecutorStateEvents,
-                        initialData: ExecutorState.created,
-                        builder: (context, AsyncSnapshot<ExecutorState> snapshot) {
-                          if (snapshot.hasData) {
-                            return _StudyControllerLine(studyDeploymentModel.studyState.name, heading: "State ");
-                          }
-                          else {
-                            return _StudyControllerLine(ExecutorState.initialized.name, heading: "State ");
-                          }
-                        },
-                      ),
-                      StreamBuilder<Measurement>(
-                          stream: studyDeploymentModel.measurements,
-                          builder: (context, AsyncSnapshot<Measurement> snapshot) {
-                            return _StudyControllerLine(
-                                '${studyDeploymentModel.samplingSize}',
-                                heading: 'Sample Size ');
-                          }),
-                    ],
-                  )
-              ),
-            ],
+  Widget _buildDetailRow(String label, String value) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 4.0),
+      child: Wrap(
+        // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        spacing: 8.0,
+        children: [
+          Text(
+            label,
+            style: const TextStyle(fontWeight: FontWeight.bold),
           ),
-        ),
+          Text(value),
+        ],
       ),
-    );
-  }
-
-  void _showSettings() {
-    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-        content: Text("Settings not implemented yet...", softWrap: true,
-        )
-    ));
-  }
-}
-
-class _StudyControllerLine extends StatelessWidget {
-  final String? line, heading;
-
-  const _StudyControllerLine(this.line, {this.heading}) : super();
-
-  @override
-  Widget build(BuildContext context) {
-    return MergeSemantics(
-      child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 4.0),
-        child: (heading == null)
-        ? Text(line!, textAlign: TextAlign.left, softWrap: true)
-        : Text.rich(
-            TextSpan(
-              children: <TextSpan>[
-                TextSpan(
-                  text: '$heading',
-                  style: const TextStyle(fontWeight: FontWeight.bold),
-                ),
-                TextSpan(text: line),
-              ],
-            ),
-        ),
-      ),
-    );
-  }
-}
-
-class _TaskPanel extends StatelessWidget {
-  const _TaskPanel({Key? key, this.task}) : super(key: key);
-
-  final TaskConfiguration? task;
-
-  @override
-  Widget build(BuildContext context) {
-    final ThemeData themeData = Theme.of(context);
-    final List<Widget>? children = task!.measures
-        ?.map((measure) => _MeasureLine(measure: measure))
-        .toList();
-
-    return Container(
-      padding: const EdgeInsets.symmetric(vertical: 16.0),
-      decoration: BoxDecoration(
-          border: Border(bottom: BorderSide(color: themeData.dividerColor))),
-      child: DefaultTextStyle(
-          style: Theme.of(context).textTheme.titleMedium!,
-          child: SafeArea(
-              top: false,
-              bottom: false,
-              child: Column(children: <Widget>[
-                Row(children: <Widget>[
-                  const Icon(Icons.description, size: 40, color: CACHET.ORANGE),
-                  Text('  ${task!.name}', style: themeData.textTheme.titleLarge),
-                ]),
-                Column(children: children!)
-                //Expanded(child: Column(children: children))
-              ]))),
-    );
-  }
-}
-
-class _MeasureLine extends StatelessWidget {
-  const _MeasureLine({Key? key, this.measure}) : super(key: key);
-
-  final Measure? measure;
-
-  @override
-  Widget build(BuildContext context) {
-    final ThemeData themeData = Theme.of(context);
-    const Icon icon = Icon(Icons.adb);
-
-    final String? name = measure?.type;
-
-    final List<Widget> columnChildren = [];
-    columnChildren.add(Text(name!));
-    columnChildren
-        .add(Text(measure.toString(), style: themeData.textTheme.bodySmall));
-
-    final List<Widget> rowChildren = [];
-    rowChildren.add(const SizedBox(
-        width: 72.0,
-        child: IconButton(
-          icon: icon,
-          onPressed: null,
-        )));
-
-    rowChildren.addAll([
-      Expanded(
-          child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: columnChildren))
-    ]);
-    return MergeSemantics(
-      child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 2.0),
-          child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: rowChildren)),
     );
   }
 }

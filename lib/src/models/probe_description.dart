@@ -1,4 +1,5 @@
 import 'package:carp_apps_package/apps.dart';
+import 'package:carp_audio_package/media.dart';
 import 'package:carp_communication_package/communication.dart';
 import 'package:carp_context_package/carp_context_package.dart';
 import 'package:carp_core/carp_core.dart';
@@ -38,6 +39,10 @@ class ProbeDescription {
       'Accelerometer',
       "Collecting sensor data from the phone's onboard accelerometer.",
     ),
+    SensorSamplingPackage.ACCELERATION_FEATURES: ProbeDescriptor(
+      'Accelerometer',
+      'A set of acceleration features collected over a specific sampling period'
+    ),
     SensorSamplingPackage.ROTATION: ProbeDescriptor(
       'Gyroscope',
       "Collecting sensor data from the phone's onboard gyroscope.",
@@ -58,14 +63,14 @@ class ProbeDescription {
     //   'Connectivity',
     //   'Collecting information on connectivity status and mode.',
     // ),
-    // MediaSamplingPackage.AUDIO: ProbeDescriptor(
-    //   'Audio',
-    //   'Records ambient sound on a regular basis.',
-    // ),
-    // MediaSamplingPackage.NOISE: ProbeDescriptor(
-    //   'Noise',
-    //   'Measures noise level in decibel on a regular basis.',
-    // ),
+    MediaSamplingPackage.AUDIO: ProbeDescriptor(
+      'Audio',
+      'Records ambient sound on a regular basis.',
+    ),
+    MediaSamplingPackage.NOISE: ProbeDescriptor(
+      'Noise',
+      'Measures noise level in decibel on a regular basis.',
+    ),
     AppsSamplingPackage.APPS: ProbeDescriptor(
       'Apps',
       'Collecting a list of installed apps.',
@@ -173,6 +178,8 @@ class ProbeDescription {
     const Icon(Icons.directions_walk, size: 50, color: CACHET.LIGHT_PURPLE),
     SensorSamplingPackage.ACCELERATION:
     const Icon(Icons.adb, size: 50, color: CACHET.GREY_4),
+    SensorSamplingPackage.ACCELERATION_FEATURES:
+    const Icon(Icons.adb, size: 50, color: CACHET.GREY_4),
     SensorSamplingPackage.ROTATION:
     const Icon(Icons.adb, size: 50, color: CACHET.GREY_4),
     SensorSamplingPackage.AMBIENT_LIGHT:
@@ -183,10 +190,10 @@ class ProbeDescription {
     // Icon(Icons.wifi, size: 50, color: CACHET.LIGHT_PURPLE),
     // ConnectivitySamplingPackage.CONNECTIVITY:
     // Icon(Icons.cast_connected, size: 50, color: CACHET.GREEN),
-    // MediaSamplingPackage.AUDIO:
-    // Icon(Icons.mic, size: 50, color: CACHET.ORANGE),
-    // MediaSamplingPackage.NOISE:
-    // Icon(Icons.hearing, size: 50, color: CACHET.YELLOW),
+    MediaSamplingPackage.AUDIO:
+    const Icon(Icons.mic, size: 50, color: CACHET.ORANGE),
+    MediaSamplingPackage.NOISE:
+    const Icon(Icons.hearing, size: 50, color: CACHET.YELLOW),
     AppsSamplingPackage.APPS:
     const Icon(Icons.apps, size: 50, color: CACHET.LIGHT_GREEN),
     AppsSamplingPackage.APP_USAGE:
