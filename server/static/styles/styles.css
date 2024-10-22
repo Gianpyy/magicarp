@@ -1,0 +1,299 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    display: flex;
+}
+
+/* Sidebar styles */
+.sidebar {
+    height: 100vh;
+    width: 250px;
+    background-color: #2c3e50;
+    color: white;
+    padding-top: 20px;
+    position: fixed;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+}
+
+.sidebar-content {
+    flex-grow: 1; /* Fa sì che questa parte si espanda se necessario, spingendo in basso il logout */
+}
+
+.sidebar h2 {
+    text-align: center;
+    color: #ecf0f1;
+}
+
+.sidebar a {
+    margin-top: auto;
+    padding: 15px;
+    text-align: center;
+    display: block;
+    color: white;
+    text-decoration: none;
+    background-color: #e74c3c;
+}
+
+.sidebar button {
+    display: block;
+    background-color: #34495e;
+    color: white;
+    border: none;
+    padding: 15px;
+    margin-bottom: 10px;
+    text-align: left;
+    font-size: 18px;
+    cursor: pointer;
+    width: 100%;
+    transition: background-color 0.3s;
+}
+
+.sidebar button:hover {
+    background-color: #1abc9c;
+}
+
+.main-content {
+    margin-left: 250px;
+    padding: 20px;
+    width: calc(100% - 250px);
+}
+
+.form-wrapper {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    width: 100vw;
+}
+
+.form-container {
+    background-color: white;
+    padding: 2em;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: 300px;
+}
+
+h2 {
+    text-align: center;
+    margin-bottom: 1em;
+}
+
+label {
+    display: block;
+    margin-bottom: 0.5em;
+}
+
+input[type="text"],
+input[type="password"] {
+    width: 100%;
+    padding: 0.5em;
+    margin-bottom: 1em;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-sizing: border-box;
+}
+
+button.form-button {
+    width: 100%;
+    padding: 0.5em;
+    background-color: #007BFF;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1em;
+    box-sizing: border-box;
+    margin-top: 15px;
+}
+
+button:hover {
+    background-color: #0056b3;
+}
+
+#flash-messages {
+    width: 360px;
+    padding: 1em;
+    text-align: center;
+    border-radius: 5px;
+}
+
+#flash-messages ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+#flash-messages li {
+    margin-bottom: 0.5em;
+    padding: 0.75em;
+    border-radius: 5px;
+}
+
+.success {
+    background-color: #d4edda;
+    color: #155724;
+    border: 1px solid #c3e6cb;
+}
+
+.danger {
+    background-color: #f8d7da;
+    color: #721c24;
+    border: 1px solid #f5c6cb;
+}
+
+.warning {
+    background-color: #fff3cd;
+    color: #856404;
+    border: 1px solid #ffeeba;
+}
+
+.info {
+    background-color: #d1ecf1;
+    color: #0c5460;
+    border: 1px solid #bee5eb;
+}
+
+
+#graph-container, #second-graph-container, #third-graph-container {
+    display: flex;
+    justify-content: space-between;
+}
+
+#distanceGraph, #screenGraph, #lightGraph, #accelerationGraph, #conversationGraph, #volumeGraph {
+    width: 48%;
+    height: 400px;
+}
+
+
+#dateSelector {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 20px;
+    padding: 10px;
+    align-items: center;
+    visibility: hidden;
+}
+
+#dateSelector label {
+    font-size: 18px;
+    padding-top: 8px;
+    color: #2c3e50; /* Colore del testo scuro */
+    margin-right: 10px; /* Spazio tra la label e l'input */
+    font-weight: bold; /* Testo leggermente più marcato */
+    transition: color 0.3s ease; /* Transizione colore */
+}
+
+.date-input {
+    padding: 10px;
+    font-size: 16px;
+    border: 2px solid #3498db; /* Bordo blu */
+    border-radius: 5px; /* Angoli arrotondati */
+    background-color: #f7f9fc; /* Colore di sfondo chiaro */
+    color: #2c3e50; /* Testo scuro */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Leggera ombra */
+    transition: all 0.3s ease; /* Transizione per effetto hover */
+}
+
+.date-input:focus {
+    border-color: #1abc9c; /* Cambia colore del bordo quando è selezionato */
+    box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15); /* Aumenta l'ombra al focus */
+    outline: none; /* Rimuove il bordo blu standard */
+}
+
+.date-input:hover {
+    border-color: #2980b9; /* Colore del bordo quando si passa sopra */
+}
+
+.upload-file-form-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.upload-file-form {
+    display: flex;
+    flex-direction: column; /* Dispone gli elementi in colonna */
+    align-items: center; /* Allinea al centro */
+    background-color: #ffffff; /* Colore di sfondo bianco */
+    padding: 20px; /* Padding interno per un aspetto più spazioso */
+    border-radius: 10px; /* Angoli arrotondati */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Ombra per effetto di profondità */
+    width: 100%; /* Occupa il 100% della larghezza */
+    max-width: 400px; /* Larghezza massima per controllare l'aspetto */
+    margin: 20px auto; /* Centra il form orizzontalmente e aggiunge margine verticale */
+}
+
+.upload-file-form label {
+    font-size: 18px; /* Dimensione del font della label */
+    color: #2c3e50; /* Colore del testo */
+    margin-bottom: 10px; /* Spazio sotto la label */
+    font-weight: bold; /* Grassetto per la label */
+}
+
+.upload-file-form input[type="file"] {
+    padding: 10px; /* Padding per l'input file */
+    font-size: 16px; /* Dimensione del font dell'input */
+    border: 1px solid #ccc; /* Bordo grigio chiaro */
+    border-radius: 5px; /* Angoli arrotondati */
+    transition: border-color 0.3s ease; /* Transizione per il colore del bordo */
+    width: 95%; /* Larghezza del 100% */
+    margin-bottom: 20px; /* Spazio sotto l'input */
+}
+
+.upload-file-form button {
+    padding: 10px; /* Padding per il bottone */
+    background-color: #007BFF; /* Colore di sfondo blu */
+    color: white; /* Colore del testo bianco */
+    border: none; /* Nessun bordo */
+    border-radius: 5px; /* Angoli arrotondati */
+    cursor: pointer; /* Cambia il cursore al passaggio sopra */
+    font-size: 16px; /* Dimensione del font */
+    transition: background-color 0.3s ease; /* Transizione per il colore di sfondo */
+    width: 100%; /* Larghezza del 100% */
+}
+
+.upload-file-form button:hover {
+    background-color: #0056b3; /* Colore di sfondo quando il mouse è sopra */
+}
+
+.date-input {
+    padding: 5px;
+    font-size: 16px;
+}
+
+#patientsAtRisk {
+    margin-top: 50px; /* Margine superiore */
+}
+
+#patientsAtRisk h1 {
+    text-align: left; /* Centra il titolo */
+    color: #930000; /* Colore del testo del titolo */
+}
+
+.patients-container {
+    display: flex; /* Usa Flexbox per disporre le card in riga */
+    flex-wrap: wrap; /* Permette il wrapping delle card in base allo spazio disponibile */
+    justify-content: flex-start; /* Centra le card orizzontalmente */
+    gap: 20px; /* Spaziatura tra le card */
+    margin-top: 30px;
+}
+
+.patient-card {
+    background-color: #ffffff; /* Colore di sfondo per i singoli pazienti */
+    text-align: left;
+    border: 1px solid #ddd; /* Bordo leggero */
+    border-radius: 5px; /* Angoli arrotondati per le schede */
+    padding: 15px; /* Spaziatura interna */
+    width: 200px; /* Larghezza fissa per le card */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Ombra per le card */
+    transition: transform 0.3s; /* Transizione per l'effetto di zoom */
+}
+
+.patient-card:hover {
+    transform: translateY(-5px); /* Effetto di sollevamento al passaggio del mouse */
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2); /* Ombra più intensa al passaggio del mouse */
+}
