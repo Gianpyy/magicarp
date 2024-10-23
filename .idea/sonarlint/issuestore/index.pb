@@ -14,3 +14,7 @@ E
 ai/data_processing.py,7\5\75c15b240a0cce2a9a5ed9b2fcdb73613e9fe6bb
 A
 app/lib/main.dart,9\9\99e14883a0b77ddb8107df3445f7313d9bd84cf3
+@
+app/pubspec.yaml,b\2\b215b30459807feffb97f76955821637a8212743
+\
+,app/android/app/src/main/AndroidManifest.xml,2\a\2a6757fba9063f5ec0d18fef1228a67d6f3c4d10
