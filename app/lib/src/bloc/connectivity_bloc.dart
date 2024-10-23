@@ -97,10 +97,10 @@ class ConnectivityBLoC {
           log("[INFO] Sending remaining data to server");
           await Sensing().sendDataToServer();
         } else {
-          log("[INFO] WiFi has no access to the internet, remaining data wil be lost :(");
+          log("[INFO] WiFi has no access to the internet, remaining data wil be lost");
         }
       } else {
-        log("[INFO] No WiFi connection, remaining data will be lost :(");
+        log("[INFO] No WiFi connection, remaining data will be lost");
       }
     }
 

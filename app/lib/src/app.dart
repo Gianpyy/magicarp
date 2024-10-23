@@ -170,9 +170,7 @@ class _CarpMobileSensingAppState extends State<CarpMobileSensingApp> {
   final _pages = [
     StudyDeploymentPage(model: sensingBloc.studyDeploymentModel),
     ProbeListPage(probes: sensingBloc.runningProbes),
-    //const DeviceList(),
     const TaskListPage(),
-    //const DataVisualizationPage(),
   ];
 
   Future<void> _requestPermissionForAndroid() async {
@@ -327,9 +325,6 @@ class _CarpMobileSensingAppState extends State<CarpMobileSensingApp> {
             items: const <BottomNavigationBarItem>[
               BottomNavigationBarItem(icon: Icon(Icons.sms_failed_outlined), label: "About"),
               BottomNavigationBarItem(icon: Icon(Icons.adb), label: "Sensors"),
-              //BottomNavigationBarItem(icon: Icon(Icons.watch), label: "Devices"),
-              BottomNavigationBarItem(icon: Icon(Icons.spellcheck), label: "Tasks"),
-              //BottomNavigationBarItem(icon: Icon(Icons.insert_chart), label: "Data"),
             ],
             currentIndex: _selectedIndex,
             type: BottomNavigationBarType.fixed,

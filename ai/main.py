@@ -81,7 +81,7 @@ def run_lopo_cross_validation_with_sliding_window(daily_data, features, window_s
     )
 
     # Print results
-    output_file = "output/evaluation_metrics_sliding3.md"
+    output_file = "output/evaluation_metrics_sliding.md"
     save_anomalies_to_markdown(all_results, output_file)
     save_results_to_db(all_results)
 

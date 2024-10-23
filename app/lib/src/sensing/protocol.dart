@@ -1,11 +1,7 @@
-import 'package:carp_apps_package/apps.dart';
 import 'package:carp_audio_package/media.dart';
-import 'package:carp_communication_package/communication.dart';
 import 'package:carp_context_package/carp_context_package.dart';
 import 'package:carp_core/carp_core.dart';
 import 'package:carp_mobile_sensing/carp_mobile_sensing.dart';
-import 'package:carp_survey_package/survey.dart';
-import 'package:magicarp/src/sensing/surveys.dart';
 
 /// This class configures a [SmartphoneStudyProtocol] with [TriggerConfiguration]s, [TaskControl]s and [Measure]s
 class LocalStudyProtocolManager implements StudyProtocolManager {
@@ -22,6 +18,18 @@ class LocalStudyProtocolManager implements StudyProtocolManager {
         // the ID of the user uploading the protocol.
         ownerId: "979b408d-784e-4b1b-bb1e-ff9204e072f3",
         name: "Track something, hopefully this time the app will stay opened in background!",
+        studyDescription: StudyDescription(
+            title: 'magicarp',
+            description: "This study protocol aims to continuously monitor the "
+                "daily activities and behaviors of patients using smartphone "
+                "sensors. The data collected will help assess behavioral "
+                "patterns and potential health risks, with the goal of "
+                "detecting early signs of relapse or changes in mental health. "
+                "The study ensures the use of passive sensing to minimize "
+                "interference with the patient's daily life, while providing "
+                "clinicians with valuable insights for timely intervention.",
+            purpose: 'Track patient data'
+        )
     );
 
     // Define the data end-point

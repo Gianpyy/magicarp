@@ -12,7 +12,7 @@ class ProbeListPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Active Probes"),
+        title: const Text("Active Sensors"),
       ),
       body: ListView.builder(
         itemCount: probes.length,

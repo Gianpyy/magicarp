@@ -20,7 +20,6 @@ class StudyDeploymentPage extends StatelessWidget {
             expandedHeight: 250.0,
             pinned: true,
             flexibleSpace: FlexibleSpaceBar(
-              title: Text(model.title),
               background: Stack(
                 fit: StackFit.expand,
                 children: <Widget>[

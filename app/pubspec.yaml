@@ -1,5 +1,9 @@
-name: magicarp
-description: "pain"
+name: schizomonitor
+description: SchizoMonitor is a sensing application designed to monitor and assist
+  patients with schizophrenia. The app collects real-time data from various sensors (GPS,
+  screen events, light, acceleration, noise, and audio) to track daily activities and behavioral patterns.
+  SchizoMonitor enables healthcare professionals to remotely monitor patients and, in conjunction with
+  predictive models, assists in identifying early signs of relapse, providing timely interventions.
 # The following line prevents the package from being accidentally published to
 # pub.dev using `flutter pub publish`. This is preferred for private packages.
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
@@ -51,7 +55,6 @@ dependencies:
 
   # Other
   flutter_launcher_icons: ^0.13.1
-  # background_locator_2: ^2.0.6 # A Flutter plugin to request the location even if the app is killed. Sending the location to a dart function in background, also provide a meter filter
   flutter_foreground_service: ^0.4.1 # Foreground service for the Android platform, keeps app running even when in background.
   flutter_foreground_task: ^7.1.0 # This plugin is used to implement a foreground service on the Android platform.
   json_annotation: ^4.8.1
