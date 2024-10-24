@@ -39,8 +39,7 @@
     <img src="app/assets/img/study.png" alt="Logo">
   </a>
 
-<h2 align="center">SchizoMonitor</h3>
-
+<h3 align="center">SchizoMonitor</h3>
   <p align="center">
     A system for monitoring and assisting patients with schizophrenia
     <br />
@@ -49,7 +48,7 @@
   </p>
 </div>
 
-* ****
+
 
 <!-- ABOUT THE PROJECT -->
 ## 📖 About The Project
@@ -75,8 +74,6 @@ and intervene manually to prevent the relapse before it occurs.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
-***
-
 <!-- FEATURES -->
 ## 🚀 Features
 
@@ -97,7 +94,6 @@ and intervene manually to prevent the relapse before it occurs.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
-***
 
 <!-- DOCUMENTATION -->
 ## 📄 Documentation
@@ -110,7 +106,6 @@ You can access the full thesis <a href="docs/Thesis.pdf">here</a>, which provide
 Please note that the thesis is written in **Italian**. You may use your preferred translation tool if needed.
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
-***
 
 <!-- INSTALLATION -->
 ## 🖥️ Installation
@@ -118,17 +113,23 @@ Please note that the thesis is written in **Italian**. You may use your preferre
 For detailed setup instructions, refer to the <a href="docs/Installation_manual.pdf">installation manual</a>, which contains a step-by-step guide to run the project on your machine.
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
-***
 
 <!-- SCREENSHOTS -->
 ## 📸 Screenshots
-<img src="screenshots/app_main_page.png" width="40%">
-<img src="screenshots/app_sensor_page.png" width="40%">
-<img src="screenshots/dashboard.png">
-<img src="screenshots/patients_at_risk.png">
+
+<center>
+  <p float="left">
+    <img src="screenshots/app_main_page.png" width="45%">
+    <img src="screenshots/app_sensor_page.png" width="45%">
+  </p>
+  
+  <img src="screenshots/dashboard.png">
+  <img src="screenshots/patients_at_risk.png">
+</center>
+
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
-***
+
 <!-- AUTHOR -->
 ## 👤 Author
 
